@@ -1,0 +1,74 @@
+---
+- name: Include OS-specfic variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "vars/{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+        - "vars/{{ ansible_os_family }}.yml"
+      skip: true
+
+- name: Define ldap_server_packages
+  set_fact:
+    ldap_server_packages: "{{ __ldap_server_packages | list }}"
+  when: ldap_server_packages is not defined
+
+- name: Define ldap_python_modules
+  set_fact:
+    ldap_python_modules: "{{ __ldap_python_modules | list }}"
+  when: ldap_python_modules is not defined
+
+- name: Define ldap_python_modules_pip
+  set_fact:
+    ldap_python_modules_pip: "{{ __ldap_python_modules_pip | list }}"
+  when: ldap_python_modules_pip is not defined
+
+- name: Define ldap_install_python_module_via_pip
+  set_fact:
+    ldap_install_python_module_via_pip: "{{ __ldap_install_python_module_via_pip }}"
+  when: ldap_install_python_module_via_pip is not defined
+
+- name: Define ldap_owner
+  set_fact:
+    ldap_owner: "{{ __ldap_owner }}"
+  when: ldap_owner is not defined
+
+- name: Define ldap_group
+  set_fact:
+    ldap_group: "{{ __ldap_group }}"
+  when: ldap_group is not defined
+
+- name: Define ldap_conf_file
+  set_fact:
+    ldap_conf_file: "{{ __ldap_conf_file }}"
+  when: ldap_conf_file is not defined
+
+- name: Define slap_daemon
+  set_fact:
+    slap_daemon: "{{ __slap_daemon }}"
+  when: slap_daemon is not defined
+
+# Set ldap_admin_base_dn to ldap_base then it does not defined.
+- name: Define ldap_admin_base_dn
+  set_fact:
+    ldap_admin_base_dn: "{{ ldap_base }}"
+  when: ldap_admin_base_dn is not defined
+
+- name: Define slap_conf_file
+  set_fact:
+    slap_conf_file: "{{ __slap_conf_file }}"
+  when: slap_conf_file is not defined
+
+- name: Define slap_module_path
+  set_fact:
+    slap_module_path: "{{ __slap_module_path }}"
+  when: slap_module_path is not defined
+
+- name: Define slap_db_type
+  set_fact:
+    slap_db_type: "{{ __slap_db_type }}"
+  when: slap_db_type is not defined
+
+- name: Define ldap_admin_dn
+  set_fact:
+    ldap_admin_dn: "{{ ldap_admin }},{{ ldap_admin_base_dn }}"
+  when: ldap_admin_dn is not defined

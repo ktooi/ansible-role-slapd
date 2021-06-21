@@ -1,0 +1,35 @@
+---
+- name: Install LDAP packages.
+  become: yes
+  apt:
+    name: "{{ ldap_server_packages }}"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Install python packages for LDAP.
+  become: yes
+  apt:
+    name: "{{ ldap_python_modules }}"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  when: not ldap_install_python_module_via_pip
+
+- name: Install python packages for LDAP using pip.
+  become: yes
+  pip:
+    name: "{{ ldap_python_modules_pip }}"
+  when: ldap_install_python_module_via_pip
+
+  #- name: "Ensure values of the slapd with debconf."
+  #  become: yes
+  #  debconf:
+  #    name: slapd
+  #    question: slapd/domain
+  #    vtype: "string"
+  #    value: "{{ ldap_domain }}"
+  #  register: debconf_slapd_domain
+  #
+  #- name: "Reconfigure the slapd"
+  #  become: yes
+  #  command: dpkg-reconfigure -f noninteractive slapd
+  #  when: debconf_slapd_domain.changed

@@ -1,0 +1,11 @@
+---
+- name: Ensure slapd of global config options were configured
+  become: yes
+  ldap_attrs:
+    dn: "cn=config"
+    attributes:
+      olcIdleTimeout: '{{ ldap_idletimeout | default(omit) }}'
+      olcLogLevel: '{{ ldap_loglevel | default(omit) }}'
+      olcSizeLimit: '{{ ldap_sizelimit | default(omit) }}'
+      olcReferral: '{{ ldap_referral | default(omit) }}'
+    state: exact

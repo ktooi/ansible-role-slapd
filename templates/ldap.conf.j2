@@ -1,0 +1,113 @@
+#
+# LDAP Defaults
+#
+
+# See ldap.conf(5) for details
+# This file should be world readable but not world writable.
+
+{% if ldap_base is defined %}
+BASE	{{ ldap_base }}
+{% else %}
+#BASE	dc=example,dc=com
+{% endif %}
+{% if ldap_uri_list is defined %}
+URI	{{ ldap_uri_list | join(' ') }}
+{% else %}
+#URI	ldap://ldap.example.com ldap://ldap-master.example.com:666
+{% endif %}
+
+{% if ldap_sizelimit is defined %}
+SIZELIMIT	{{ ldap_sizelimit }}
+{% else %}
+#SIZELIMIT	12
+{% endif %}
+{% if ldap_timelimit is defined %}
+TIMELIMIT	{{ ldap_timelimit }}
+{% else %}
+#TIMELIMIT	15
+{% endif %}
+{% if ldap_deref is defined %}
+DEREF		{{ ldap_deref }}
+{% else %}
+#DEREF		never
+{% endif %}
+
+{% if ldap_host_list is defined %}
+HOST	{{ ldap_host_list | join(' ') }}
+{% endif %}
+{% if ldap_network_timeout is defined %}
+NETWORK_TIMEOUT	{{ ldap_network_timeout }}
+{% endif %}
+{% if ldap_port is defined %}
+PORT	{{ ldap_port }}
+{% endif %}
+{% if ldap_referrals is defined %}
+REFERRALS	{{ ldap_referrals }}
+{% endif %}
+{% if ldap_version is defined %}
+VERSION	{{ ldap_version }}
+{% endif %}
+{% if ldap_timeout is defined %}
+TIMEOUT	{{ ldap_timeout }}
+{% endif %}
+
+{% if ldap_sasl_mech is defined %}
+SASL_MECH	{{ ldap_sasl_mech }}
+{% endif %}
+{% if ldap_sasl_realm is defined %}
+SASL_REALM	{{ ldap_sasl_realm }}
+{% endif %}
+{% if ldap_sasl_authcid is defined %}
+SASL_AUTHCID	{{ ldap_sasl_authcid }}
+{% endif %}
+{% if ldap_sasl_authzid is defined %}
+SASL_AUTHZID	{{ ldap_sasl_authzid }}
+{% endif %}
+{% if ldap_sasl_secprops is defined %}
+SASL_SECPROPS	{{ ldap_sasl_secprops }}
+{% endif %}
+{% if ldap_sasl_nocanon is defined %}
+SASL_NOCANON	{{ ldap_sasl_nocanon }}
+{% endif %}
+
+{% if ldap_gssapi_sign is defined %}
+GSSAPI_SIGN
+{% endif %}
+{% if ldap_gssapi_encrypt is defined %}
+GSSAPI_ENCRYPT
+{% endif %}
+{% if ldap_gssapi_allow_remote_principal is defined %}
+GSSAPI_ALLOW_REMOTE_PRINCIPAL
+{% endif %}
+
+# TLS certificates (needed for GnuTLS)
+{% if ldap_tls_cacert is defined %}
+TLS_CACERT	{{ ldap_tls_cacert }}
+{% endif %}
+{% if ldap_tls_cacertdir is defined %}
+TLS_CACERTDIR	{{ ldap_tls_cacertdir }}
+{% endif %}
+{% if ldap_tls_cert is defined %}
+TLS_CERT	{{ ldap_tls_cert }}
+{% endif %}
+{% if ldap_tls_key is defined %}
+TLS_KEY	{{ ldap_Tls_key }}
+{% endif %}
+{% if ldap_tls_cipher_suite is defined %}
+TLS_CIPHER_SUITE	{{ ldap_tls_cipher_suite }}
+{% endif %}
+{% if ldap_tls_protocol_min is defined %}
+TLS_PROTOCOL_MIN	{{ ldap_tls_protocol_min }}
+{% endif %}
+{% if ldap_tls_randfile is defined %}
+TLS_RANDFILE	{{ ldap_tls_randfile }}
+{% endif %}
+{% if ldap_tls_reqcert is defined %}
+TLS_REQCERT	{{ ldap_tls_reqcert }}
+{% endif %}
+{% if ldap_tls_crlcheck is defined %}
+TLS_CRLCHECK	{{ ldap_tls_crlcheck }}
+{% endif %}
+{% if ldap_tls_crlfile is defined %}
+TLS_CRLFILE	{{ ldap_tls_crlfile }}
+{% endif %}

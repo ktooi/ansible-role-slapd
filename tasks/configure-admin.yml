@@ -1,0 +1,33 @@
+---
+- name: Configure LDAP root to password
+  become: yes
+  ldap_attrs:
+    dn: "olcDatabase={0}config,cn=config"
+    attributes:
+      olcRootPW: '{{ ldap_root_hashed_passwd }}'
+    state: exact
+
+- name: Configure the database to under access control
+  become: yes
+  ldap_attrs:
+    dn: 'olcDatabase={1}{{ slap_db_type }},cn=config'
+    attributes:
+      olcAccess:
+        - 'to * by 
+          by dn="{{ ldap_admin_dn }}" manage'
+        - 'to attrs=userPassword
+          by dn="{{ ldap_admin_dn }}" write
+          by anonymous auth
+          by self write
+          by * none'
+        - 'to attrs=shadowLastChange
+          by self write
+          by * read'
+        - 'to dn.base=""
+          by * read'
+        - 'to *
+          by dn="{{ ldap_admin_dn }}" write'
+      olcSuffix: '{{ ldap_base }}'
+      olcRootDN: '{{ ldap_admin_dn }}'
+      olcRootPW: '{{ ldap_admin_hashed_passwd }}'
+    state: exact

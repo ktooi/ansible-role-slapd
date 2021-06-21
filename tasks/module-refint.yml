@@ -1,0 +1,42 @@
+---
+- name: "Check the refint.la module was already loaded"
+  become: yes
+  community.general.ldap_search:
+    dn: "cn=config"
+    scope: "onelevel"
+    filter: "(&(objectClass=olcModuleList)(olcModuleLoad=refint.la))"
+  register: module_refint
+
+- name: "Ensure a module refint.la was loaded"
+  become: yes
+  ldap_entry:
+    dn: "{%- if module_refint.results[0] is defined -%}{{ module_refint.results[0].dn }}{%- else -%}cn=module,cn=config{%- endif -%}"
+    objectClass:
+      - olcModuleList
+      - top
+    attributes:
+      cn: module
+      olcModulePath: '{{ slap_module_path }}'
+      olcModuleLoad: refint.la
+    state: present
+
+- name: "Check the refint overlay was already exists"
+  become: yes
+  community.general.ldap_search:
+    dn: "olcDatabase={1}{{ slap_db_type }},cn=config"
+    schema: true
+    scope: "onelevel"
+    filter: "(&(olcOverlay=refint)(objectClass=olcRefintConfig))"
+  register: overlay_refint
+
+- name: "Ensure the refint overlay was registered"
+  become: yes
+  ldap_entry:
+    dn: "{%- if overlay_refint.results[0] is defined -%}{{ overlay_refint.results[0].dn }}{%- else -%}olcOverlay=refint,olcDatabase={1}{{ slap_db_type }},cn=config{%- endif -%}"
+    objectClass:
+      - olcOverlayConfig
+      - olcRefintConfig
+      - top
+    attributes:
+      olcOverlay: "refint"
+      olcRefintAttribute: memberof member manager owner

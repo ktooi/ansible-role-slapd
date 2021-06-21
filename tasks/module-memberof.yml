@@ -1,0 +1,40 @@
+---
+- name: "Check the memberof.la module was already loaded"
+  become: yes
+  community.general.ldap_search:
+    dn: "cn=config"
+    scope: "onelevel"
+    filter: "(&(objectClass=olcModuleList)(olcModuleLoad=memberof.la))"
+  register: module_memberof
+
+- name: "Ensure a module memberof.la was loaded"
+  become: yes
+  ldap_entry:
+    dn: "{%- if module_memberof.results[0] is defined -%}{{ module_memberof.results[0].dn }}{%- else -%}cn=module,cn=config{%- endif -%}"
+    objectClass:
+      - olcModuleList
+      - top
+    attributes:
+      cn: module
+      olcModulePath: '{{ slap_module_path }}'
+      olcModuleLoad: memberof.la
+
+- name: "Check the memberof overlay was already exists"
+  become: yes
+  community.general.ldap_search:
+    dn: "olcDatabase={1}{{ slap_db_type }},cn=config"
+    schema: true
+    scope: "onelevel"
+    filter: "(&(olcOverlay=memberof)(objectClass=olcMemberOf))"
+  register: overlay_memberof
+
+- name: "Ensure the memberof overlay was registered"
+  become: yes
+  ldap_entry:
+    dn: "{%- if overlay_memberof.results[0] is defined -%}{{ overlay_memberof.results[0].dn }}{%- else -%}olcOverlay=memberof,olcDatabase={1}{{ slap_db_type }},cn=config{%- endif -%}"
+    objectClass:
+      - olcOverlayConfig
+      - olcMemberOf
+    attributes:
+      olcOverlay: "memberof"
+      olcMemberOfRefint: "TRUE"

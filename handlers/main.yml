@@ -1,0 +1,6 @@
+---
+- name: restart slapd
+  become: yes
+  service:
+    name: "{{ slap_daemon }}"
+    state: restarted

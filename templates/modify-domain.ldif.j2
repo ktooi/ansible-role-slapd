@@ -1,0 +1,13 @@
+dn: olcDatabase={1}{{ slap_db_type }},cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: {{ ldap_base }}
+-
+replace: olcRootDN
+olcRootDN: {{ ldap_admin }},{{ ldap_base }}
+-
+replace: olcRootPW
+olcRootPW: {{ ldap_admin_hashed_passwd }}
+-
+replace: olcAccess
+olcAccess: {0}to * by dn="{{ ldap_admin }},{{ ldap_base }}" write by * read
