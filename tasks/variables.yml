@@ -47,11 +47,11 @@
     slap_daemon: "{{ __slap_daemon }}"
   when: slap_daemon is not defined
 
-# Set ldap_admin_base_dn to ldap_base then it does not defined.
-- name: Define ldap_admin_base_dn
+# Set ldap_admin_basedn to ldap_basedn then it does not defined.
+- name: Define ldap_admin_basedn
   set_fact:
-    ldap_admin_base_dn: "{{ ldap_base }}"
-  when: ldap_admin_base_dn is not defined
+    ldap_admin_basedn: "{{ ldap_basedn }}"
+  when: ldap_admin_basedn is not defined
 
 - name: Define slap_conf_file
   set_fact:
@@ -70,5 +70,5 @@
 
 - name: Define ldap_admin_dn
   set_fact:
-    ldap_admin_dn: "{{ ldap_admin }},{{ ldap_admin_base_dn }}"
+    ldap_admin_dn: "{{ ldap_admin }},{{ ldap_admin_basedn }}"
   when: ldap_admin_dn is not defined

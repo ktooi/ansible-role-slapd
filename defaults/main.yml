@@ -1,5 +1,5 @@
 ---
-ldap_base: dc=example,dc=com
+ldap_basedn: dc=example,dc=com
 ldap_base_head: example
 ldap_organization_name: Example Co., Ltd.
 #ldap_organization_name: example.com

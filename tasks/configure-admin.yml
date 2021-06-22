@@ -25,7 +25,7 @@
           by * read'
         - 'to dn.base=""
           by * read'
-      olcSuffix: '{{ ldap_base }}'
+      olcSuffix: '{{ ldap_basedn }}'
       olcRootDN: '{{ ldap_admin_dn }}'
       olcRootPW: '{{ ldap_admin_hashed_passwd }}'
     state: exact

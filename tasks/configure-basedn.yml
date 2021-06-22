@@ -5,7 +5,7 @@
     argv:
       - slapcat
       - -a
-      - '(entryDN:={{ ldap_base }})'
+      - '(entryDN:={{ ldap_basedn }})'
   changed_when: false
   register: basedn
 
@@ -44,7 +44,7 @@
 
 - name: Ensure baseDN
   ldap_attrs:
-    dn: '{{ ldap_base }}'
+    dn: '{{ ldap_basedn }}'
     bind_dn: "{{ ldap_admin_dn }}"
     bind_pw: "{{ ldap_admin_passwd }}"
     attributes:
