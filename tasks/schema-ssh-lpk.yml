@@ -6,6 +6,7 @@
     schema: true
     scope: "onelevel"
     filter: "(&(cn={*}ssh-lpk)(objectClass=olcSchemaConfig))"
+  check_mode: no
   register: schema_lpk
 
 - name: "Ensure the ssh-lpk schema was registered"

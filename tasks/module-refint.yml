@@ -5,6 +5,7 @@
     dn: "cn=config"
     scope: "onelevel"
     filter: "(&(objectClass=olcModuleList)(olcModuleLoad=refint.la))"
+  check_mode: no
   register: module_refint
 
 - name: "Ensure a module refint.la was loaded"
@@ -27,6 +28,7 @@
     schema: true
     scope: "onelevel"
     filter: "(&(olcOverlay=refint)(objectClass=olcRefintConfig))"
+  check_mode: no
   register: overlay_refint
 
 - name: "Ensure the refint overlay was registered"

@@ -5,6 +5,7 @@
     dn: "cn=config"
     scope: "onelevel"
     filter: "(&(objectClass=olcModuleList)(olcModuleLoad=memberof.la))"
+  check_mode: no
   register: module_memberof
 
 - name: "Ensure a module memberof.la was loaded"
@@ -26,6 +27,7 @@
     schema: true
     scope: "onelevel"
     filter: "(&(olcOverlay=memberof)(objectClass=olcMemberOf))"
+  check_mode: no
   register: overlay_memberof
 
 - name: "Ensure the memberof overlay was registered"

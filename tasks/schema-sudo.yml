@@ -6,6 +6,7 @@
     schema: true
     scope: "onelevel"
     filter: "(&(cn={*}sudo)(objectClass=olcSchemaConfig))"
+  check_mode: no
   register: schema_sudo
 
 - name: "Ensure the sudo schema was registered"
