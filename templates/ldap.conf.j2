@@ -16,8 +16,8 @@ URI	{{ ldap_uri_list | join(' ') }}
 #URI	ldap://ldap.example.com ldap://ldap-master.example.com:666
 {% endif %}
 
-{% if ldap_sizelimit is defined %}
-SIZELIMIT	{{ ldap_sizelimit }}
+{% if slapd_sizelimit is defined %}
+SIZELIMIT	{{ slapd_sizelimit }}
 {% else %}
 #SIZELIMIT	12
 {% endif %}
@@ -41,8 +41,8 @@ NETWORK_TIMEOUT	{{ ldap_network_timeout }}
 {% if ldap_port is defined %}
 PORT	{{ ldap_port }}
 {% endif %}
-{% if ldap_referrals is defined %}
-REFERRALS	{{ ldap_referrals }}
+{% if slapd_referrals is defined %}
+REFERRALS	{{ slapd_referrals }}
 {% endif %}
 {% if ldap_version is defined %}
 VERSION	{{ ldap_version }}

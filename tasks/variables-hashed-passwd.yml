@@ -5,7 +5,7 @@
         argv:
           - slappasswd
           - -h
-          - '{{ ldap_passwd_scheme }}'
+          - '{{ slapd_passwd_scheme }}'
           - -s
           - '{{ ldap_root_passwd }}'
       changed_when: false
@@ -21,7 +21,7 @@
         argv:
           - slappasswd
           - -h
-          - '{{ ldap_passwd_scheme }}'
+          - '{{ slapd_passwd_scheme }}'
           - -s
           - '{{ ldap_admin_passwd }}'
       changed_when: false

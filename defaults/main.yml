@@ -39,8 +39,11 @@ ldap_tls_cacert: "/etc/ssl/certs/ca-certificates.crt"
 #ldap_tls_crlcheck: 
 #ldap_tls_crlfile: 
 
-ldap_loglevel: stats
-ldap_passwd_scheme: '{SSHA}'
+slapd_loglevel: stats
+#slapd_idletimeout: 86400
+#slapd_sizelimit: 500
+#slapd_referral: on
+slapd_passwd_scheme: '{SSHA}'
 ldap_root_passwd: "root_passwd"
 ldap_admin: "cn=admin"
 #ldap_admin_base: "dc=example,dc=com"
@@ -48,7 +51,7 @@ ldap_admin_passwd: "admin_passwd"
 # $ slappasswd -h '{SSHA}'
 #ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
 #ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
-ldap_enable_schema_ssh_lpk: true
-ldap_enable_schema_sudo: true
-ldap_install_module_refint: true
-ldap_install_module_memberof: true
+slapd_install_schema_ssh_lpk: true
+slapd_install_schema_sudo: true
+slapd_install_module_refint: true
+slapd_install_module_memberof: true

@@ -22,10 +22,10 @@
     ldap_python_modules_pip: "{{ __ldap_python_modules_pip | list }}"
   when: ldap_python_modules_pip is not defined
 
-- name: Define ldap_install_python_module_via_pip
+- name: Define slapd_install_python_module_via_pip
   set_fact:
-    ldap_install_python_module_via_pip: "{{ __ldap_install_python_module_via_pip }}"
-  when: ldap_install_python_module_via_pip is not defined
+    slapd_install_python_module_via_pip: "{{ __slapd_install_python_module_via_pip }}"
+  when: slapd_install_python_module_via_pip is not defined
 
 - name: Define ldap_owner
   set_fact:

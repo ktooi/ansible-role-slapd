@@ -4,8 +4,8 @@
   ldap_attrs:
     dn: "cn=config"
     attributes:
-      olcIdleTimeout: '{{ ldap_idletimeout | default(omit) }}'
-      olcLogLevel: '{{ ldap_loglevel | default(omit) }}'
-      olcSizeLimit: '{{ ldap_sizelimit | default(omit) }}'
-      olcReferral: '{{ ldap_referral | default(omit) }}'
+      olcIdleTimeout: '{{ slapd_idletimeout | default(omit) }}'
+      olcLogLevel: '{{ slapd_loglevel | default(omit) }}'
+      olcSizeLimit: '{{ slapd_sizelimit | default(omit) }}'
+      olcReferral: '{{ slapd_referral | default(omit) }}'
     state: exact

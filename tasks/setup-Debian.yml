@@ -12,13 +12,13 @@
     name: "{{ ldap_python_modules }}"
   environment:
     DEBIAN_FRONTEND: noninteractive
-  when: not ldap_install_python_module_via_pip
+  when: not slapd_install_python_module_via_pip
 
 - name: Install python packages for LDAP using pip.
   become: yes
   pip:
     name: "{{ ldap_python_modules_pip }}"
-  when: ldap_install_python_module_via_pip
+  when: slapd_install_python_module_via_pip
 
   #- name: "Ensure values of the slapd with debconf."
   #  become: yes

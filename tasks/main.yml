@@ -7,10 +7,10 @@
 - include_tasks: "configure-basedn.yml"
 - include_tasks: "configure-admin.yml"
 - include_tasks: "module-memberof.yml"
-  when: ldap_install_module_memberof
+  when: slapd_install_module_memberof
 - include_tasks: "module-refint.yml"
-  when: ldap_install_module_refint or ldap_install_module_memberof
+  when: slapd_install_module_refint or slapd_install_module_memberof
 - include_tasks: "schema-ssh-lpk.yml"
-  when: ldap_enable_schema_ssh_lpk
+  when: slapd_install_schema_ssh_lpk
 - include_tasks: "schema-sudo.yml"
-  when: ldap_enable_schema_sudo
+  when: slapd_install_schema_sudo
