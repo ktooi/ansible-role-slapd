@@ -25,8 +25,6 @@
           by * read'
         - 'to dn.base=""
           by * read'
-        - 'to *
-          by dn="{{ ldap_admin_dn }}" write'
       olcSuffix: '{{ ldap_base }}'
       olcRootDN: '{{ ldap_admin_dn }}'
       olcRootPW: '{{ ldap_admin_hashed_passwd }}'
