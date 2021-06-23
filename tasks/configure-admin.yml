@@ -10,7 +10,7 @@
 - name: Configure the database to under access control
   become: yes
   ldap_attrs:
-    dn: 'olcDatabase={1}{{ slap_db_type }},cn=config'
+    dn: 'olcDatabase={1}{{ slapd_db_type }},cn=config'
     attributes:
       olcAccess:
         - 'to * by 

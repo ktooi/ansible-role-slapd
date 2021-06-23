@@ -42,10 +42,10 @@
     ldap_conf_file: "{{ __ldap_conf_file }}"
   when: ldap_conf_file is not defined
 
-- name: Define slap_daemon
+- name: Define slapd_daemon
   set_fact:
-    slap_daemon: "{{ __slap_daemon }}"
-  when: slap_daemon is not defined
+    slapd_daemon: "{{ __slapd_daemon }}"
+  when: slapd_daemon is not defined
 
 # Set ldap_admin_basedn to ldap_basedn then it does not defined.
 - name: Define ldap_admin_basedn
@@ -53,20 +53,20 @@
     ldap_admin_basedn: "{{ ldap_basedn }}"
   when: ldap_admin_basedn is not defined
 
-- name: Define slap_conf_file
+- name: Define slapd_conf_file
   set_fact:
-    slap_conf_file: "{{ __slap_conf_file }}"
-  when: slap_conf_file is not defined
+    slapd_conf_file: "{{ __slapd_conf_file }}"
+  when: slapd_conf_file is not defined
 
-- name: Define slap_module_path
+- name: Define slapd_module_path
   set_fact:
-    slap_module_path: "{{ __slap_module_path }}"
-  when: slap_module_path is not defined
+    slapd_module_path: "{{ __slapd_module_path }}"
+  when: slapd_module_path is not defined
 
-- name: Define slap_db_type
+- name: Define slapd_db_type
   set_fact:
-    slap_db_type: "{{ __slap_db_type }}"
-  when: slap_db_type is not defined
+    slapd_db_type: "{{ __slapd_db_type }}"
+  when: slapd_db_type is not defined
 
 - name: Define ldap_admin_dn
   set_fact:

@@ -2,5 +2,5 @@
 - name: restart slapd
   become: yes
   service:
-    name: "{{ slap_daemon }}"
+    name: "{{ slapd_daemon }}"
     state: restarted

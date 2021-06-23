@@ -17,13 +17,13 @@
       - top
     attributes:
       cn: module
-      olcModulePath: '{{ slap_module_path }}'
+      olcModulePath: '{{ slapd_module_path }}'
       olcModuleLoad: memberof.la
 
 - name: "Check the memberof overlay was already exists"
   become: yes
   community.general.ldap_search:
-    dn: "olcDatabase={1}{{ slap_db_type }},cn=config"
+    dn: "olcDatabase={1}{{ slapd_db_type }},cn=config"
     schema: true
     scope: "onelevel"
     filter: "(&(olcOverlay=memberof)(objectClass=olcMemberOf))"
@@ -33,7 +33,7 @@
 - name: "Ensure the memberof overlay was registered"
   become: yes
   ldap_entry:
-    dn: "{%- if overlay_memberof.results[0] is defined -%}{{ overlay_memberof.results[0].dn }}{%- else -%}olcOverlay=memberof,olcDatabase={1}{{ slap_db_type }},cn=config{%- endif -%}"
+    dn: "{%- if overlay_memberof.results[0] is defined -%}{{ overlay_memberof.results[0].dn }}{%- else -%}olcOverlay=memberof,olcDatabase={1}{{ slapd_db_type }},cn=config{%- endif -%}"
     objectClass:
       - olcOverlayConfig
       - olcMemberOf
