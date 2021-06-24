@@ -3,7 +3,7 @@
     - name: Generate hashed password of LDAP root
       command:
         argv:
-          - slappasswd
+          - '{{ slapd_cmd_slappasswd }}'
           - -h
           - '{{ slapd_passwd_scheme }}'
           - -s
@@ -20,7 +20,7 @@
     - name: Generate hashed password of LDAP administrator
       command:
         argv:
-          - slappasswd
+          - '{{ slapd_cmd_slappasswd }}'
           - -h
           - '{{ slapd_passwd_scheme }}'
           - -s

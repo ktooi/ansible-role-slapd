@@ -3,7 +3,7 @@
   become: yes
   command:
     argv:
-      - slapcat
+      - '{{ slapd_cmd_slapcat }}'
       - -a
       - '(entryDN:={{ ldap_basedn }})'
   changed_when: false
@@ -22,7 +22,15 @@
       dest: "{{ temp_modify_domain.path }}"
   - name: "Replace basically configurations (2/2)"
     become: yes
-    command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ temp_modify_domain.path }}"
+    command:
+      argv:
+        - '{{ ldap_cmd_ldapmodify }}'
+        - -Y
+        - EXTERNAL
+        - -H
+        - ldapi:///
+        - -f
+        - '{{ temp_modify_domain.path }}'
   - name: "Delete temporary file to replace basically configurations"
     file:
       path: "{{ temp_modify_domain.path }}"
@@ -36,7 +44,16 @@
       src: add-domain.ldif.j2
       dest: "{{ temp_add_basedn.path }}"
   - name: "Add basically baseDN configurations (2/2)"
-    command: ldapadd -x -D "{{ ldap_admin_dn }}" -w "{{ ldap_admin_passwd }}" -f "{{ temp_add_basedn.path }}"
+    command:
+      argv:
+        - '{{ ldap_cmd_ldapadd }}'
+        - -x
+        - -D
+        - '{{ ldap_admin_dn }}'
+        - -w
+        - '{{ ldap_admin_passwd }}'
+        - -f
+        - '{{ temp_add_basedn.path }}'
   - name: "Delete temporary file to add basically baseDN configurations"
     file:
       path: "{{ temp_add_basedn.path }}"

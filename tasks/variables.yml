@@ -42,6 +42,16 @@
     ldap_conf_file: "{{ __ldap_conf_file }}"
   when: ldap_conf_file is not defined
 
+- name: Define ldap_cmd_ldapmodify
+  set_fact:
+    ldap_cmd_ldapmodify: "{{ __ldap_cmd_ldapmodify }}"
+  when: ldap_cmd_ldapmodify is not defined
+
+- name: Define ldap_cmd_ldapadd
+  set_fact:
+    ldap_cmd_ldapadd: "{{ __ldap_cmd_ldapadd }}"
+  when: ldap_cmd_ldapadd is not defined
+
 - name: Define slapd_daemon
   set_fact:
     slapd_daemon: "{{ __slapd_daemon }}"
@@ -67,6 +77,16 @@
   set_fact:
     slapd_db_type: "{{ __slapd_db_type }}"
   when: slapd_db_type is not defined
+
+- name: Define slapd_cmd_slappasswd
+  set_fact:
+    slapd_cmd_slappasswd: "{{ __slapd_cmd_slappasswd }}"
+  when: slapd_cmd_slappasswd is not defined
+
+- name: Define slapd_cmd_slapcat
+  set_fact:
+    slapd_cmd_slapcat: "{{ __slapd_cmd_slapcat }}"
+  when: slapd_cmd_slapcat is not defined
 
 - name: Define ldap_admin_dn
   set_fact:
