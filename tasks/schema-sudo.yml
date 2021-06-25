@@ -12,7 +12,12 @@
 - name: "Ensure the sudo schema was registered"
   become: yes
   ldap_entry:
-    dn: "{%- if schema_sudo.results[0] is defined -%}{{ schema_sudo.results[0].dn }}{%- else -%}cn=sudo,cn=schema,cn=config{%- endif -%}"
+    dn: >-
+      {%- if schema_sudo.results[0] is defined -%}
+      {{ schema_sudo.results[0].dn }}
+      {%- else -%}
+      cn=sudo,cn=schema,cn=config
+      {%- endif -%}
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "sudo"

@@ -11,7 +11,12 @@
 - name: "Ensure a module memberof.la was loaded"
   become: yes
   ldap_entry:
-    dn: "{%- if module_memberof.results[0] is defined -%}{{ module_memberof.results[0].dn }}{%- else -%}cn=module,cn=config{%- endif -%}"
+    dn: >-
+      {%- if module_memberof.results[0] is defined -%}
+      {{ module_memberof.results[0].dn }}
+      {%- else -%}
+      cn=module,cn=config
+      {%- endif -%}
     objectClass:
       - olcModuleList
       - top
@@ -33,7 +38,12 @@
 - name: "Ensure the memberof overlay was registered"
   become: yes
   ldap_entry:
-    dn: "{%- if overlay_memberof.results[0] is defined -%}{{ overlay_memberof.results[0].dn }}{%- else -%}olcOverlay=memberof,olcDatabase={1}{{ slapd_db_type }},cn=config{%- endif -%}"
+    dn: >-
+      {%- if overlay_memberof.results[0] is defined -%}
+      {{ overlay_memberof.results[0].dn }}
+      {%- else -%}
+      olcOverlay=memberof,olcDatabase={1}{{ slapd_db_type }},cn=config
+      {%- endif -%}
     objectClass:
       - olcOverlayConfig
       - olcMemberOf

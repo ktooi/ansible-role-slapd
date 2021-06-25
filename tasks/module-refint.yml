@@ -11,7 +11,12 @@
 - name: "Ensure a module refint.la was loaded"
   become: yes
   ldap_entry:
-    dn: "{%- if module_refint.results[0] is defined -%}{{ module_refint.results[0].dn }}{%- else -%}cn=module,cn=config{%- endif -%}"
+    dn: >-
+      {%- if module_refint.results[0] is defined -%}
+      {{ module_refint.results[0].dn }}
+      {%- else -%}
+      cn=module,cn=config
+      {%- endif -%}
     objectClass:
       - olcModuleList
       - top
@@ -34,7 +39,12 @@
 - name: "Ensure the refint overlay was registered"
   become: yes
   ldap_entry:
-    dn: "{%- if overlay_refint.results[0] is defined -%}{{ overlay_refint.results[0].dn }}{%- else -%}olcOverlay=refint,olcDatabase={1}{{ slapd_db_type }},cn=config{%- endif -%}"
+    dn: >-
+      {%- if overlay_refint.results[0] is defined -%}
+      {{ overlay_refint.results[0].dn }}
+      {%- else -%}
+      olcOverlay=refint,olcDatabase={1}{{ slapd_db_type }},cn=config
+      {%- endif -%}
     objectClass:
       - olcOverlayConfig
       - olcRefintConfig

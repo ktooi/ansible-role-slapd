@@ -12,7 +12,12 @@
 - name: "Ensure the ssh-lpk schema was registered"
   become: yes
   ldap_entry:
-    dn: "{%- if schema_lpk.results[0] is defined -%}{{ schema_lpk.results[0].dn }}{%- else -%}cn=ssh-lpk,cn=schema,cn=config{%- endif -%}"
+    dn: >-
+      {%- if schema_lpk.results[0] is defined -%}
+      {{ schema_lpk.results[0].dn }}
+      {%- else -%}
+      cn=ssh-lpk,cn=schema,cn=config
+      {%- endif -%}
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "ssh-lpk"
