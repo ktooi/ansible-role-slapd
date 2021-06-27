@@ -51,6 +51,9 @@ ldap_admin_passwd: "admin_passwd"
 # $ slappasswd -h '{SSHA}'
 #ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
 #ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
+slapd_install_schema_cosine: true
+slapd_install_schema_nis: true
+slapd_install_schema_misc: true
 slapd_install_schema_ssh_lpk: true
 slapd_install_schema_sudo: true
 slapd_install_module_refint: true

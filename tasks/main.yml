@@ -10,6 +10,12 @@
   when: slapd_install_module_memberof
 - include_tasks: "module-refint.yml"
   when: slapd_install_module_refint or slapd_install_module_memberof
+- include_tasks: "schema-cosine.yml"
+  when: slapd_install_schema_cosine or slapd_install_schema_nis
+- include_tasks: "schema-nis.yml"
+  when: slapd_install_schema_nis
+- include_tasks: "schema-misc.yml"
+  when: slapd_install_schema_misc
 - include_tasks: "schema-ssh-lpk.yml"
   when: slapd_install_schema_ssh_lpk
 - include_tasks: "schema-sudo.yml"
