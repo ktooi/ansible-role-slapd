@@ -20,3 +20,5 @@
   when: slapd_install_schema_ssh_lpk
 - include_tasks: "schema-sudo.yml"
   when: slapd_install_schema_sudo
+- include_tasks: "schema-samba3.yml"
+  when: slapd_install_schema_samba3
