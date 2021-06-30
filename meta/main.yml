@@ -4,23 +4,23 @@ dependencies: []
 galaxy_info:
   role_name: slapd
   author: ktooi
-  #description: Configure slapd for RHEL/CentOS and Debian/Ubuntu.
+  # description: Configure slapd for RHEL/CentOS and Debian/Ubuntu.
   description: Configure slapd for Debian/Ubuntu.
   license: "license (MIT)"
   min_ansible_version: 2.0
   platforms:
-    #- name: EL
-    #  versions:
-    #    - 7
-    #    - 8
+    # - name: EL
+    #   versions:
+    #     - 7
+    #     - 8
+    # - name: Archlinux
+    #   versions:
+    #     - all
     - name: Ubuntu
       versions:
         - all
     - name: Debian
       versions:
         - all
-    #- name: Archlinux
-    #  versions:
-    #    - all
   galaxy_tags:
     - ldap

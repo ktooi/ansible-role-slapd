@@ -9,7 +9,7 @@
           - -s
           - '{{ ldap_root_passwd }}'
       changed_when: false
-      check_mode: no
+      check_mode: false
       register: cmd_ldap_root_hashed_passwd
     - name: Define ldap_root_hashed_passwd
       set_fact:
@@ -26,7 +26,7 @@
           - -s
           - '{{ ldap_admin_passwd }}'
       changed_when: false
-      check_mode: no
+      check_mode: false
       register: cmd_ldap_admin_hashed_passwd
     - name: Define ldap_admin_hashed_passwd
       set_fact:

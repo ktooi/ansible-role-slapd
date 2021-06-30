@@ -1,63 +1,63 @@
 ---
 - name: "Check the baseDN was already registered"
-  become: yes
+  become: true
   command:
     argv:
       - '{{ slapd_cmd_slapcat }}'
       - -a
       - '(entryDN:={{ ldap_basedn }})'
   changed_when: false
-  check_mode: no
+  check_mode: false
   register: basedn
 
 - block:
-  - name: "Create temporary file to replace basically configurations"
-    tempfile:
-      state: file
-    register: temp_modify_domain
-  - name: "Replace basically configurations (1/2)"
-    template:
-      src: modify-domain.ldif.j2
-      mode: 0400
-      dest: "{{ temp_modify_domain.path }}"
-  - name: "Replace basically configurations (2/2)"
-    become: yes
-    command:
-      argv:
-        - '{{ ldap_cmd_ldapmodify }}'
-        - -Y
-        - EXTERNAL
-        - -H
-        - ldapi:///
-        - -f
-        - '{{ temp_modify_domain.path }}'
-  - name: "Delete temporary file to replace basically configurations"
-    file:
-      path: "{{ temp_modify_domain.path }}"
-      state: absent
-  - name: "Create temporary file to add basically baseDN configurations"
-    tempfile:
-      state: file
-    register: temp_add_basedn
-  - name: "Add basically baseDN configurations (1/2)"
-    template:
-      src: add-domain.ldif.j2
-      dest: "{{ temp_add_basedn.path }}"
-  - name: "Add basically baseDN configurations (2/2)"
-    command:
-      argv:
-        - '{{ ldap_cmd_ldapadd }}'
-        - -x
-        - -D
-        - '{{ ldap_admin_dn }}'
-        - -w
-        - '{{ ldap_admin_passwd }}'
-        - -f
-        - '{{ temp_add_basedn.path }}'
-  - name: "Delete temporary file to add basically baseDN configurations"
-    file:
-      path: "{{ temp_add_basedn.path }}"
-      state: absent
+    - name: "Create temporary file to replace basically configurations"
+      tempfile:
+        state: file
+      register: temp_modify_domain
+    - name: "Replace basically configurations (1/2)"
+      template:
+        src: modify-domain.ldif.j2
+        mode: 0400
+        dest: "{{ temp_modify_domain.path }}"
+    - name: "Replace basically configurations (2/2)"
+      become: true
+      command:
+        argv:
+          - '{{ ldap_cmd_ldapmodify }}'
+          - -Y
+          - EXTERNAL
+          - -H
+          - ldapi:///
+          - -f
+          - '{{ temp_modify_domain.path }}'
+    - name: "Delete temporary file to replace basically configurations"
+      file:
+        path: "{{ temp_modify_domain.path }}"
+        state: absent
+    - name: "Create temporary file to add basically baseDN configurations"
+      tempfile:
+        state: file
+      register: temp_add_basedn
+    - name: "Add basically baseDN configurations (1/2)"
+      template:
+        src: add-domain.ldif.j2
+        dest: "{{ temp_add_basedn.path }}"
+    - name: "Add basically baseDN configurations (2/2)"
+      command:
+        argv:
+          - '{{ ldap_cmd_ldapadd }}'
+          - -x
+          - -D
+          - '{{ ldap_admin_dn }}'
+          - -w
+          - '{{ ldap_admin_passwd }}'
+          - -f
+          - '{{ temp_add_basedn.path }}'
+    - name: "Delete temporary file to add basically baseDN configurations"
+      file:
+        path: "{{ temp_add_basedn.path }}"
+        state: absent
   when: not basedn.stdout_lines
 
 - name: Ensure baseDN

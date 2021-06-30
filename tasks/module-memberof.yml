@@ -1,15 +1,15 @@
 ---
 - name: "Check the memberof.la module was already loaded"
-  become: yes
+  become: true
   community.general.ldap_search:
     dn: "cn=config"
     scope: "onelevel"
     filter: "(&(objectClass=olcModuleList)(olcModuleLoad=memberof.la))"
-  check_mode: no
+  check_mode: false
   register: module_memberof
 
 - name: "Ensure a module memberof.la was loaded"
-  become: yes
+  become: true
   ldap_entry:
     dn: >-
       {%- if module_memberof.results[0] is defined -%}
@@ -26,17 +26,17 @@
       olcModuleLoad: memberof.la
 
 - name: "Check the memberof overlay was already exists"
-  become: yes
+  become: true
   community.general.ldap_search:
     dn: "olcDatabase={1}{{ slapd_db_type }},cn=config"
     schema: true
     scope: "onelevel"
     filter: "(&(olcOverlay=memberof)(objectClass=olcMemberOf))"
-  check_mode: no
+  check_mode: false
   register: overlay_memberof
 
 - name: "Ensure the memberof overlay was registered"
-  become: yes
+  become: true
   ldap_entry:
     dn: >-
       {%- if overlay_memberof.results[0] is defined -%}

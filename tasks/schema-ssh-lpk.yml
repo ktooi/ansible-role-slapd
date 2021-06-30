@@ -1,16 +1,16 @@
 ---
 - name: "Check the ssh-lpk schema was already exists"
-  become: yes
+  become: true
   community.general.ldap_search:
     dn: "cn=schema,cn=config"
     schema: true
     scope: "onelevel"
     filter: "(&(cn={*}ssh-lpk)(objectClass=olcSchemaConfig))"
-  check_mode: no
+  check_mode: false
   register: schema_lpk
 
 - name: "Ensure the ssh-lpk schema was registered"
-  become: yes
+  become: true
   ldap_entry:
     dn: >-
       {%- if schema_lpk.results[0] is defined -%}
@@ -21,6 +21,13 @@
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "ssh-lpk"
-      olcAttributeTypes: "( 1.3.6.1.4.1.24552.500.1.1.1.13 NAME 'sshPublicKey' DESC 'MANDATORY: OpenSSH Public key' EQUALITY octetStringMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )"
-      olcObjectClasses: "( 1.3.6.1.4.1.24552.500.1.1.2.0 NAME 'ldapPublicKey' DESC 'MANDATORY: OpenSSH LPK objectclass' SUP top AUXILIARY MUST ( sshPublicKey $ uid ) )"
-  ignore_errors: yes
+      olcAttributeTypes:
+        - "( 1.3.6.1.4.1.24552.500.1.1.1.13
+             NAME 'sshPublicKey'
+             DESC 'MANDATORY: OpenSSH Public key' EQUALITY octetStringMatch
+             SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )"
+      olcObjectClasses:
+        - "( 1.3.6.1.4.1.24552.500.1.1.2.0
+             NAME 'ldapPublicKey'
+             DESC 'MANDATORY: OpenSSH LPK objectclass'
+             SUP top AUXILIARY MUST ( sshPublicKey $ uid ) )"

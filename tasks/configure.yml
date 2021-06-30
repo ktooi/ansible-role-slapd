@@ -1,14 +1,14 @@
 ---
-#- name: Get LDAP version.
-#  command: 'slapd -V'
-#  register: slapd_version
-#  changed_when: false
-#  check_mode: false
-#  failed_when:
-#    - slapd_version.rc != 1
+# - name: Get LDAP version.
+#   command: 'slapd -V'
+#   register: slapd_version
+#   changed_when: false
+#   check_mode: false
+#   failed_when:
+#     - slapd_version.rc != 1
 
 - name: Copy ldap.conf.
-  become: yes
+  become: true
   template:
     src: ldap.conf.j2
     dest: "{{ ldap_conf_file }}"
