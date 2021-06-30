@@ -1,6 +1,6 @@
 ---
 - name: Ensure slapd of global config options were configured
-  become: yes
+  become: true
   ldap_attrs:
     dn: "cn=config"
     attributes:

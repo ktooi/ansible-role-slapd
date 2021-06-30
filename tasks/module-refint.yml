@@ -1,15 +1,15 @@
 ---
 - name: "Check the refint.la module was already loaded"
-  become: yes
+  become: true
   community.general.ldap_search:
     dn: "cn=config"
     scope: "onelevel"
     filter: "(&(objectClass=olcModuleList)(olcModuleLoad=refint.la))"
-  check_mode: no
+  check_mode: false
   register: module_refint
 
 - name: "Ensure a module refint.la was loaded"
-  become: yes
+  become: true
   ldap_entry:
     dn: >-
       {%- if module_refint.results[0] is defined -%}
@@ -27,17 +27,17 @@
     state: present
 
 - name: "Check the refint overlay was already exists"
-  become: yes
+  become: true
   community.general.ldap_search:
     dn: "olcDatabase={1}{{ slapd_db_type }},cn=config"
     schema: true
     scope: "onelevel"
     filter: "(&(olcOverlay=refint)(objectClass=olcRefintConfig))"
-  check_mode: no
+  check_mode: false
   register: overlay_refint
 
 - name: "Ensure the refint overlay was registered"
-  become: yes
+  become: true
   ldap_entry:
     dn: >-
       {%- if overlay_refint.results[0] is defined -%}

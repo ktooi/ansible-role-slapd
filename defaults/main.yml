@@ -2,55 +2,55 @@
 ldap_basedn: dc=example,dc=com
 ldap_base_head: example
 ldap_organization_name: Example Co., Ltd.
-#ldap_organization_name: example.com
+# ldap_organization_name: example.com
 ldap_domain: example.com
-#ldap_uri_list:
-#  - ldap://ldap.example.com
-#  - ldap://ldap-master.example.com:666
-#ldap_sizelimit: 12
-#ldap_timelimit: 15
-#ldap_deref: never
-#ldap_host_list:
-#  - example.com:1234
-#  - example.co.jp
-#ldap_network_timeout: 128
-#ldap_port: 1234
-#ldap_referrals: on
-#ldap_version: 3
-#ldap_timeout: 128
-#ldap_sasl_mech: 
-#ldap_sasl_realm: 
-#ldap_sasl_authcid: 
-#ldap_sasl_authzid: 
-#ldap_sasl_secprops: 
-#ldap_sasl_nocanon: on
-#ldap_gssapi_sign: on
-#ldap_gssapi_encrypt: on
-#ldap_gssapi_allow_remote_principal: on
+# ldap_uri_list:
+#   - ldap://ldap.example.com
+#   - ldap://ldap-master.example.com:666
+# ldap_sizelimit: 12
+# ldap_timelimit: 15
+# ldap_deref: never
+# ldap_host_list:
+#   - example.com:1234
+#   - example.co.jp
+# ldap_network_timeout: 128
+# ldap_port: 1234
+# ldap_referrals: on
+# ldap_version: 3
+# ldap_timeout: 128
+# ldap_sasl_mech: <mechanism>
+# ldap_sasl_realm: <realm>
+# ldap_sasl_authcid: <authcid>
+# ldap_sasl_authzid: <authcid>
+# ldap_sasl_secprops: <properties>
+# ldap_sasl_nocanon: on
+# ldap_gssapi_sign: on
+# ldap_gssapi_encrypt: on
+# ldap_gssapi_allow_remote_principal: on
 
 ldap_tls_cacert: "/etc/ssl/certs/ca-certificates.crt"
-#ldap_tls_cacertdir: 
-#ldap_tls_cert: 
-#ldap_tls_key: 
-#ldap_tls_cipher_suite: 
-#ldap_tls_protocol_min: 
-#ldap_tls_randfile: 
-#ldap_tls_reqcert: 
-#ldap_tls_crlcheck: 
-#ldap_tls_crlfile: 
+# ldap_tls_cacertdir: <path>
+# ldap_tls_cert: <filename>
+# ldap_tls_key: <filename>
+# ldap_tls_cipher_suite: <cipher-suite-spec>
+# ldap_tls_protocol_min: <major>[.<minor>]
+# ldap_tls_randfile: <filename>
+# ldap_tls_reqcert: <level>
+# ldap_tls_crlcheck: <level>
+# ldap_tls_crlfile: <filename>
 
 slapd_loglevel: stats
-#slapd_idletimeout: 86400
-#slapd_sizelimit: 500
-#slapd_referral: on
+# slapd_idletimeout: 86400
+# slapd_sizelimit: 500
+# slapd_referral: on
 slapd_passwd_scheme: '{SSHA}'
 ldap_root_passwd: "root_passwd"
 ldap_admin: "cn=admin"
-#ldap_admin_base: "dc=example,dc=com"
+# ldap_admin_base: "dc=example,dc=com"
 ldap_admin_passwd: "admin_passwd"
 # $ slappasswd -h '{SSHA}'
-#ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
-#ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
+ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
+ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
 slapd_install_schema_cosine: true
 slapd_install_schema_nis: true
 slapd_install_schema_misc: true
