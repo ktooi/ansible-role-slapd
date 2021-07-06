@@ -28,7 +28,7 @@ ldap_domain: example.com
 # ldap_gssapi_encrypt: on
 # ldap_gssapi_allow_remote_principal: on
 
-ldap_tls_cacert: "/etc/ssl/certs/ca-certificates.crt"
+# ldap_tls_cacert: "/etc/ssl/certs/ca-certificates.crt"
 # ldap_tls_cacertdir: <path>
 # ldap_tls_cert: <filename>
 # ldap_tls_key: <filename>
@@ -49,12 +49,12 @@ ldap_admin: "cn=admin"
 # ldap_admin_base: "dc=example,dc=com"
 ldap_admin_passwd: "admin_passwd"
 # $ slappasswd -h '{SSHA}'
-ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
-ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
+# ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
+# ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
 slapd_install_schema_cosine: true
 slapd_install_schema_nis: true
-slapd_install_schema_misc: true
-slapd_install_schema_ssh_lpk: true
-slapd_install_schema_sudo: true
-slapd_install_module_refint: true
-slapd_install_module_memberof: true
+slapd_install_schema_misc: false
+slapd_install_schema_ssh_lpk: false
+slapd_install_schema_sudo: false
+slapd_install_module_refint: false
+slapd_install_module_memberof: false
