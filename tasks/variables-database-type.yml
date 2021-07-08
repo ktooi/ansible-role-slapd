@@ -1,0 +1,13 @@
+---
+- name: "Check the memberof.la module was already loaded"
+  become: true
+  community.general.ldap_search:
+    dn: "cn=config"
+    scope: "onelevel"
+    filter: "(&(objectClass=olcDatabaseConfig)(olcDatabase={{ slapd_db_type }}))"
+  check_mode: false
+  register: tmp_slapd_olcDatabase_type
+
+- name: "Define slapd_olcDatabase_type_dn"
+  set_fact:
+    slapd_olcDatabase_type_dn: '{{ tmp_slapd_olcDatabase_type.results[0].dn }}'

@@ -1,16 +1,8 @@
 ---
-- name: Configure LDAP root to password
-  become: true
-  ldap_attrs:
-    dn: "olcDatabase={0}config,cn=config"
-    attributes:
-      olcRootPW: '{{ ldap_root_hashed_passwd }}'
-    state: exact
-
 - name: Configure the database to under access control
   become: true
   ldap_attrs:
-    dn: 'olcDatabase={1}{{ slapd_db_type }},cn=config'
+    dn: '{{ slapd_olcDatabase_type_dn }}'
     attributes:
       olcAccess:
         - 'to *
@@ -37,3 +29,8 @@
       olcRootDN: '{{ ldap_admin_dn }}'
       olcRootPW: '{{ ldap_admin_hashed_passwd }}'
     state: exact
+  # WORKAROUND: Skip this task due to the following error occurred at RedHat 7
+  # OTHER: {'info': '<olcModuleLoad> handler exited with 1', 'desc': 'Other (e.g., implementation specific) error'}
+  when: >-
+    not ( ansible_os_family == "RedHat"
+    and ansible_distribution_major_version == "7" )
