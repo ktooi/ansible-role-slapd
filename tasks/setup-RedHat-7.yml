@@ -1,0 +1,23 @@
+---
+- name: Install LDAP packages.
+  become: true
+  yum:
+    name: "{{ ldap_server_packages }}"
+
+- name: Install python packages for LDAP.
+  become: true
+  yum:
+    name: "{{ ldap_python_modules }}"
+  when: not slapd_install_python_module_via_pip
+
+- name: Install python packages for LDAP using pip.
+  become: true
+  pip:
+    name: "{{ ldap_python_modules_pip }}"
+  when: slapd_install_python_module_via_pip
+
+- name: Make sure the slapd service is running.
+  systemd:
+    state: started
+    enabled: true
+    name: "{{ slapd_daemon }}"

@@ -28,7 +28,7 @@
 - name: "Check the memberof overlay was already exists"
   become: true
   community.general.ldap_search:
-    dn: "olcDatabase={1}{{ slapd_db_type }},cn=config"
+    dn: '{{ slapd_olcDatabase_type_dn }}'
     schema: true
     scope: "onelevel"
     filter: "(&(olcOverlay=memberof)(objectClass=olcMemberOf))"
@@ -42,7 +42,7 @@
       {%- if overlay_memberof.results[0] is defined -%}
       {{ overlay_memberof.results[0].dn }}
       {%- else -%}
-      olcOverlay=memberof,olcDatabase={1}{{ slapd_db_type }},cn=config
+      olcOverlay=memberof,{{ slapd_olcDatabase_type_dn }}
       {%- endif -%}
     objectClass:
       - olcOverlayConfig
