@@ -27,8 +27,14 @@ None.
 Inside `vars/main.yml` :
 
 ```
-ldap_basedn: dc=example,dc=com
-# TODO
+ldap_basedn: dc=your,dc=domain,dc=example,dc=com
+ldap_base_head: your
+ldap_organization_name: Your Example Co., Ltd.
+ldap_domain: your.domain.example.com
+
+ldap_root_passwd: "root_passwd"
+ldap_admin: "cn=Manager"
+ldap_admin_passwd: "Manager_p@55w0rd"
 ```
 
 ## Authors
