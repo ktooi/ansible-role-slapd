@@ -1,6 +1,6 @@
 # Ansible Role: slapd
 
-Debian/Ubuntu サーバに slapd をインストールし、基本的な設定を行います。
+RHEL/CentOS, Debian/Ubuntu サーバに slapd をインストールし、基本的な設定を行います。
 
 ## Requirements
 
