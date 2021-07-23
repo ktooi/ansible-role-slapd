@@ -3,6 +3,8 @@
   become: true
   apt:
     name: "{{ ldap_server_packages }}"
+    update_cache: true
+    cache_valid_time: "{{ slapd_cache_vaild_time | default(86400) }}"
   environment:
     DEBIAN_FRONTEND: noninteractive
 

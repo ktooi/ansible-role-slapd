@@ -15,5 +15,9 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 provisioner:
   name: ansible
+  inventory:
+    group_vars:
+      all:
+        slapd_cache_vaild_time: 0
 verifier:
   name: ansible
