@@ -22,6 +22,13 @@
     name: "{{ ldap_python_modules_pip }}"
   when: slapd_install_python_module_via_pip
 
+- name: Start the slapd daemon.
+  become: true
+  systemd:
+    name: "{{ slapd_daemon }}"
+    enabled: true
+    state: started
+
 # - name: "Ensure values of the slapd with debconf."
 #   become: yes
 #   debconf:
