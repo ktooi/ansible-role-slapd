@@ -67,6 +67,8 @@
     attributes:
       olcRootPW: '{{ ldap_root_hashed_passwd }}'
     state: exact
+  tags:
+    - molecule-idempotence-notest
 
 - name: Ensure baseDN
   ldap_attrs:
