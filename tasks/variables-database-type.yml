@@ -1,5 +1,5 @@
 ---
-- name: "Check the memberof.la module was already loaded"
+- name: "Get the DN of olcDatabase={{ slapd_db_type }}"
   become: true
   community.general.ldap_search:
     dn: "cn=config"
