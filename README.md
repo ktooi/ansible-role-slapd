@@ -56,6 +56,7 @@ slapd_install_schema_sudo: false
 # Select whether or not to install the modules.
 slapd_install_module_refint: false
 slapd_install_module_memberof: false
+slapd_install_module_syncprov: false
 ```
 
 インストールするモジュールを指定します。
