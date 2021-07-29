@@ -1,0 +1,52 @@
+---
+- name: "Check the syncprov.la module was already loaded"
+  become: true
+  community.general.ldap_search:
+    dn: "cn=config"
+    scope: "onelevel"
+    filter: "(&(objectClass=olcModuleList)(olcModuleLoad=syncprov.la))"
+  check_mode: false
+  register: module_syncprov
+
+- name: "Ensure a module syncprov.la was loaded"
+  become: true
+  ldap_entry:
+    dn: >-
+      {%- if module_syncprov.results[0] is defined -%}
+      {{ module_syncprov.results[0].dn }}
+      {%- else -%}
+      cn=module,cn=config
+      {%- endif -%}
+    objectClass:
+      - olcModuleList
+      - top
+    attributes:
+      cn: module
+      olcModulePath: '{{ slapd_module_path }}'
+      olcModuleLoad: syncprov.la
+    state: present
+
+- name: "Check the syncprov overlay was already exists"
+  become: true
+  community.general.ldap_search:
+    dn: '{{ slapd_olcDatabase_type_dn }}'
+    schema: true
+    scope: "onelevel"
+    filter: "(&(olcOverlay=syncprov)(objectClass=olcsyncprovConfig))"
+  check_mode: false
+  register: overlay_syncprov
+
+- name: "Ensure the syncprov overlay was registered"
+  become: true
+  ldap_entry:
+    dn: >-
+      {%- if overlay_syncprov.results[0] is defined -%}
+      {{ overlay_syncprov.results[0].dn }}
+      {%- else -%}
+      olcOverlay=syncprov,{{ slapd_olcDatabase_type_dn }}
+      {%- endif -%}
+    objectClass:
+      - olcOverlayConfig
+      - olcsyncprovConfig
+    attributes:
+      olcOverlay: "syncprov"
