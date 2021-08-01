@@ -13,11 +13,28 @@ platforms:
       - /tmp
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    groups:
+      - ${MOLECULE_DISTRO:-ubuntu2004}
 provisioner:
   name: ansible
   inventory:
     group_vars:
       all:
         slapd_cache_vaild_time: 0
+
+        slapd_install_schema_cosine: true
+        slapd_install_schema_nis: true
+        slapd_install_schema_misc: true
+        slapd_install_schema_ssh_lpk: true
+        slapd_install_schema_sudo: true
+
+        slapd_install_module_refint: true
+        slapd_install_module_memberof: true
+        slapd_install_module_syncprov: true
+      centos7:
+        slapd_install_module_refint: false
+        slapd_install_module_memberof: false
+        slapd_install_module_syncprov: false
+
 verifier:
   name: ansible
