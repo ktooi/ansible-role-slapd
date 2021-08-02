@@ -9,15 +9,20 @@
   check_mode: false
   register: schema_lpk
 
-- name: "Ensure the ssh-lpk schema was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name:  Define slapd_schema_lpk_dn
+  set_fact:
+    slapd_schema_lpk_dn: >-
       {%- if schema_lpk.results[0] is defined -%}
       {{ schema_lpk.results[0].dn }}
       {%- else -%}
       cn=ssh-lpk,cn=schema,cn=config
       {%- endif -%}
+  when: slapd_schema_lpk_dn is not defined
+
+- name: "Ensure the ssh-lpk schema was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_schema_lpk_dn }}"
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "ssh-lpk"

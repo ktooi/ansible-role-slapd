@@ -8,15 +8,20 @@
   check_mode: false
   register: module_refint
 
-- name: "Ensure a module refint.la was loaded"
-  become: true
-  ldap_entry:
-    dn: >-
+- name:  Define slapd_module_refint_dn
+  set_fact:
+    slapd_module_refint_dn: >-
       {%- if module_refint.results[0] is defined -%}
       {{ module_refint.results[0].dn }}
       {%- else -%}
       cn=module,cn=config
       {%- endif -%}
+  when: slapd_module_refint_dn is not defined
+
+- name: "Ensure a module refint.la was loaded"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_module_refint_dn }}"
     objectClass:
       - olcModuleList
       - top
@@ -36,15 +41,20 @@
   check_mode: false
   register: overlay_refint
 
-- name: "Ensure the refint overlay was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name:  Define slapd_overlay_refint_dn
+  set_fact:
+    slapd_overlay_refint_dn: >-
       {%- if overlay_refint.results[0] is defined -%}
       {{ overlay_refint.results[0].dn }}
       {%- else -%}
-      olcOverlay=refint,{{ slapd_olcDatabase_type_dn }}
+      cn=module,cn=config
       {%- endif -%}
+  when: slapd_overlay_refint_dn is not defined
+
+- name: "Ensure the refint overlay was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_overlay_refint_dn }}"
     objectClass:
       - olcOverlayConfig
       - olcRefintConfig

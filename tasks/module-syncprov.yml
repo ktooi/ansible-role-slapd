@@ -8,15 +8,20 @@
   check_mode: false
   register: module_syncprov
 
-- name: "Ensure a module syncprov.la was loaded"
-  become: true
-  ldap_entry:
-    dn: >-
+- name:  Define slapd_module_syncprov_dn
+  set_fact:
+    slapd_module_syncprov_dn: >-
       {%- if module_syncprov.results[0] is defined -%}
       {{ module_syncprov.results[0].dn }}
       {%- else -%}
       cn=module,cn=config
       {%- endif -%}
+  when: slapd_module_syncprov_dn is not defined
+
+- name: "Ensure a module syncprov.la was loaded"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_module_syncprov_dn }}"
     objectClass:
       - olcModuleList
       - top
@@ -36,15 +41,20 @@
   check_mode: false
   register: overlay_syncprov
 
-- name: "Ensure the syncprov overlay was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name:  Define slapd_overlay_syncprov_dn
+  set_fact:
+    slapd_overlay_syncprov_dn: >-
       {%- if overlay_syncprov.results[0] is defined -%}
       {{ overlay_syncprov.results[0].dn }}
       {%- else -%}
       olcOverlay=syncprov,{{ slapd_olcDatabase_type_dn }}
       {%- endif -%}
+  when: slapd_overlay_syncprov_dn is not defined
+
+- name: "Ensure the syncprov overlay was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_overlay_syncprov_dn }}"
     objectClass:
       - olcOverlayConfig
       - olcsyncprovConfig
