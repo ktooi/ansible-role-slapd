@@ -9,14 +9,14 @@
 
 - name: Define ldap_base_head
   set_fact:
-    ldap_base_head: |
+    ldap_base_head: >-
       {% set r = ldap_basedn.split(',')[0].split('=')[1] %}
       {{ r }}
   when: ldap_base_head is not defined
 
 - name: Define ldap_domain
   set_fact:
-    ldap_domain: |
+    ldap_domain: >-
       {% set r = [] %}
       {% for t in ldap_basedn.split(',') %}
       {%   set _ = r.append(t.split('=')[1]) %}
