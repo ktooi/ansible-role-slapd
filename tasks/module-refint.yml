@@ -8,7 +8,7 @@
   check_mode: false
   register: module_refint
 
-- name:  Define slapd_module_refint_dn
+- name: Define slapd_module_refint_dn
   set_fact:
     slapd_module_refint_dn: >-
       {%- if module_refint.results[0] is defined -%}
@@ -41,7 +41,7 @@
   check_mode: false
   register: overlay_refint
 
-- name:  Define slapd_overlay_refint_dn
+- name: Define slapd_overlay_refint_dn
   set_fact:
     slapd_overlay_refint_dn: >-
       {%- if overlay_refint.results[0] is defined -%}

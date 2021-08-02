@@ -9,7 +9,7 @@
   check_mode: false
   register: schema_misc
 
-- name:  Define slapd_schema_misc_dn
+- name: Define slapd_schema_misc_dn
   set_fact:
     slapd_schema_misc_dn: >-
       {%- if schema_misc.results[0] is defined -%}

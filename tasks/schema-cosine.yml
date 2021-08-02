@@ -9,7 +9,7 @@
   check_mode: false
   register: schema_cosine
 
-- name:  Define slapd_schema_cosine_dn
+- name: Define slapd_schema_cosine_dn
   set_fact:
     slapd_schema_cosine_dn: >-
       {%- if schema_cosine.results[0] is defined -%}

@@ -8,7 +8,7 @@
   check_mode: false
   register: module_syncprov
 
-- name:  Define slapd_module_syncprov_dn
+- name: Define slapd_module_syncprov_dn
   set_fact:
     slapd_module_syncprov_dn: >-
       {%- if module_syncprov.results[0] is defined -%}
@@ -41,7 +41,7 @@
   check_mode: false
   register: overlay_syncprov_config
 
-- name:  Define slapd_overlay_syncprov_config_dn
+- name: Define slapd_overlay_syncprov_config_dn
   set_fact:
     slapd_overlay_syncprov_config_dn: >-
       {%- if overlay_syncprov_config.results[0] is defined -%}
@@ -71,7 +71,7 @@
   check_mode: false
   register: overlay_syncprov
 
-- name:  Define slapd_overlay_syncprov_dn
+- name: Define slapd_overlay_syncprov_dn
   set_fact:
     slapd_overlay_syncprov_dn: >-
       {%- if overlay_syncprov.results[0] is defined -%}

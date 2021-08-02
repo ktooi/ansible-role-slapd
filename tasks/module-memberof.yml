@@ -9,7 +9,7 @@
   register: module_memberof
   when: slapd_module_memberof_dn is not defined
 
-- name:  Define slapd_module_memberof_dn
+- name: Define slapd_module_memberof_dn
   set_fact:
     slapd_module_memberof_dn: >-
       {%- if module_memberof.results[0] is defined -%}
@@ -42,7 +42,7 @@
   register: overlay_memberof
   when: slapd_overlay_memberof_dn is not defined
 
-- name:  Define slapd_overlay_memberof_dn
+- name: Define slapd_overlay_memberof_dn
   set_fact:
     slapd_overlay_memberof_dn: >-
       {%- if overlay_memberof.results[0] is defined -%}
