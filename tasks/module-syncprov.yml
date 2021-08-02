@@ -31,7 +31,37 @@
       olcModuleLoad: syncprov.la
     state: present
 
-- name: "Check the syncprov overlay was already exists"
+- name: "Check the syncprov overlay (in olcDatabase={0}config,cn=config) was already exists"
+  become: true
+  community.general.ldap_search:
+    dn: 'olcDatabase={0}config,cn=config'
+    schema: true
+    scope: "onelevel"
+    filter: "(&(olcOverlay=syncprov)(objectClass=olcsyncprovConfig))"
+  check_mode: false
+  register: overlay_syncprov_config
+
+- name:  Define slapd_overlay_syncprov_config_dn
+  set_fact:
+    slapd_overlay_syncprov_config_dn: >-
+      {%- if overlay_syncprov_config.results[0] is defined -%}
+      {{ overlay_syncprov_config.results[0].dn }}
+      {%- else -%}
+      olcOverlay=syncprov,olcDatabase={0}config,cn=config
+      {%- endif -%}
+  when: slapd_overlay_syncprov_config_dn is not defined
+
+- name: "Ensure the syncprov overlay (in olcDatabase={0}config,cn=config) was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_overlay_syncprov_config_dn }}"
+    objectClass:
+      - olcOverlayConfig
+      - olcsyncprovConfig
+    attributes:
+      olcOverlay: "syncprov"
+
+- name: "Check the syncprov overlay (in {{ slapd_olcDatabase_type_dn }}) was already exists"
   become: true
   community.general.ldap_search:
     dn: '{{ slapd_olcDatabase_type_dn }}'
@@ -51,7 +81,7 @@
       {%- endif -%}
   when: slapd_overlay_syncprov_dn is not defined
 
-- name: "Ensure the syncprov overlay was registered"
+- name: "Ensure the syncprov overlay (in {{ slapd_olcDatabase_type_dn }}) was registered"
   become: true
   ldap_entry:
     dn: "{{ slapd_overlay_syncprov_dn }}"
