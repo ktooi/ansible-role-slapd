@@ -47,7 +47,7 @@
       {%- if overlay_refint.results[0] is defined -%}
       {{ overlay_refint.results[0].dn }}
       {%- else -%}
-      cn=module,cn=config
+      olcOverlay=refint,{{ slapd_olcDatabase_type_dn }}
       {%- endif -%}
   when: slapd_overlay_refint_dn is not defined
 
