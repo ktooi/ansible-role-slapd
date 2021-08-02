@@ -53,6 +53,19 @@ slapd_install_schema_sudo: false
 一度インストールしたスキーマは、 `false` に設定してもアンインストールされません。
 
 ```yaml
+slapd_schema_cosine_dn: null
+slapd_schema_misc_dn: null
+slapd_schema_nis_dn: null
+slapd_schema_lpk_dn: null
+slapd_schema_sudo_dn: null
+```
+
+インストールするスキーマの DN を指定します。
+
+デフォルトでは自動的に適切な DN を選択します。
+何らかの不都合がある場合にのみ指定してください。
+
+```yaml
 # Select whether or not to install the modules.
 slapd_install_module_refint: false
 slapd_install_module_memberof: false
@@ -66,6 +79,21 @@ RHEL/CentOS 7 ではタスクに失敗するのでこれらの変数を `true` �
 `false` に設定するとモジュールはインストールされません。
 
 一度インストールしたモジュールは、 `false` に設定してもアンインストールされません。
+
+```yaml
+slapd_module_memberof_dn: null
+slapd_overlay_memberof_dn: null
+slapd_module_refint_dn: null
+slapd_overlay_refint_dn: null
+slapd_module_syncprov_dn: null
+slapd_overlay_syncprov_config_dn: null
+slapd_overlay_syncprov_dn: null
+```
+
+インストールするモジュールの DN を指定します。
+
+デフォルトでは自動的に適切な DN を選択します。
+何らかの不都合がある場合にのみ指定してください。
 
 ## Dependencies
 
