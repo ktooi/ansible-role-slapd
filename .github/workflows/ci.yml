@@ -26,6 +26,14 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Cache packages
+        uses: actions/cache@v2
+        env:
+          cache-name: python-3
+        with:
+          path: ~/.cache/pip
+          key: ktooi-slapd-yamllint
+
       - name: Install test dependencies.
         run: pip3 install yamllint
 
@@ -55,6 +63,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+
+      - name: Cache packages
+        uses: actions/cache@v2
+        env:
+          cache-name: python-3
+        with:
+          path: ~/.cache/pip
+          key: ktooi-slapd-molecule
 
       - name: Install test dependencies.
         run: pip3 install ansible molecule[docker] docker
