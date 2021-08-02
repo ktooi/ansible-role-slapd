@@ -24,6 +24,12 @@
       {{ r | join('.') }}
   when: ldap_domain is not defined
 
+- debug:
+    msg: '{{ ldap_base_head }}'
+
+- debug:
+    msg: '{{ ldap_domain }}'
+
 - name: Define ldap_server_packages
   set_fact:
     ldap_server_packages: "{{ __ldap_server_packages | list }}"
