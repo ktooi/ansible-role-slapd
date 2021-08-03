@@ -113,14 +113,19 @@ Inside `vars/main.yml` :
 
 ```yaml
 ldap_basedn: dc=your,dc=domain,dc=example,dc=com
-ldap_base_head: your
 ldap_organization_name: Your Example Co., Ltd.
-ldap_domain: your.domain.example.com
 
 ldap_root_passwd: "root_passwd"
 ldap_admin: "cn=Manager"
 ldap_admin_passwd: "Manager_p@55w0rd"
 ```
+
+```yaml
+ldap_base_head: your
+ldap_domain: your.domain.example.com
+```
+
+これらの変数の値は `ldap_basedn` から自動的に計算されますが、別の値を利用したい場合は定義してください。
 
 ## Authors
 
