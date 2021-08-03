@@ -1,8 +1,8 @@
 ---
 ldap_basedn: dc=example,dc=com
-ldap_base_head: example
+# ldap_base_head: example
 ldap_organization_name: Example Co., Ltd.
-ldap_domain: example.com
+# ldap_domain: example.com
 # ldap_uri_list:
 #   - ldap://ldap.example.com
 #   - ldap://ldap-master.example.com:666
