@@ -44,6 +44,12 @@ slapd_loglevel: stats
 # slapd_sizelimit: 500
 # slapd_referral: on
 
+# Set this to the replication of the slapd
+slapd_replication: false
+slapd_replication_uri_list:
+  - "ldap://ldap1.example.com"
+  - "ldap://ldap2.example.com"
+
 # Users credential.
 slapd_passwd_scheme: '{SSHA}'
 ldap_root_passwd: "root_passwd"
