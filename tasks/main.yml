@@ -27,3 +27,6 @@
   when: slapd_install_schema_ssh_lpk
 - include_tasks: "schema-sudo.yml"
   when: slapd_install_schema_sudo
+
+- include_tasks: "replication.yml"
+  when: slapd_replication

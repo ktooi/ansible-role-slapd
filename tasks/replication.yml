@@ -1,0 +1,129 @@
+---
+# https://www.openldap.org/doc/admin24/replication.html#N-Way%20Multi-Provider
+
+# For the following example we will be using 3 Provider nodes. Keeping in line with test050-syncrepl-multiprovider of the OpenLDAP test suite, we will be configuring slapd(8) via cn=config
+# 
+# This sets up the config database:
+# 
+#      dn: cn=config
+#      objectClass: olcGlobal
+#      cn: config
+#      olcServerID: 1
+# 
+#      dn: olcDatabase={0}config,cn=config
+#      objectClass: olcDatabaseConfig
+#      olcDatabase: {0}config
+#      olcRootPW: secret
+# second and third servers will have a different olcServerID obviously:
+# 
+#      dn: cn=config
+#      objectClass: olcGlobal
+#      cn: config
+#      olcServerID: 2
+# 
+#      dn: olcDatabase={0}config,cn=config
+#      objectClass: olcDatabaseConfig
+#      olcDatabase: {0}config
+#      olcRootPW: secret
+
+- name: Ensure slapd of global config options included olcServerID
+  become: true
+  ldap_attrs:
+    dn: "cn=config"
+    objectClass:
+      - olcGlobal
+    attributes:
+      olcServerID: "{{ TODO }}"  # TODO
+    state: exact
+
+
+## The following line was defined by module-syncprov.yml
+
+# This sets up syncrepl as a provider (since these are all providers):
+# 
+#      dn: cn=module,cn=config
+#      objectClass: olcModuleList
+#      cn: module
+#      olcModulePath: /usr/local/libexec/openldap
+#      olcModuleLoad: syncprov.la
+
+
+# Now we setup the first Provider Node (replace $URI1, $URI2 and $URI3 etc. with your actual ldap urls):
+# 
+#      dn: cn=config
+#      changetype: modify
+#      replace: olcServerID
+#      olcServerID: 1 $URI1
+#      olcServerID: 2 $URI2
+#      olcServerID: 3 $URI3
+# 
+
+
+## The following line was defined by module-syncprov.yml
+
+#      dn: olcOverlay=syncprov,olcDatabase={0}config,cn=config
+#      changetype: add
+#      objectClass: olcOverlayConfig
+#      objectClass: olcSyncProvConfig
+#      olcOverlay: syncprov
+
+
+# 
+#      dn: olcDatabase={0}config,cn=config
+#      changetype: modify
+#      add: olcSyncRepl
+#      olcSyncRepl: rid=001 provider=$URI1 binddn="cn=config" bindmethod=simple
+#        credentials=secret searchbase="cn=config" type=refreshAndPersist
+#        retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=002 provider=$URI2 binddn="cn=config" bindmethod=simple
+#        credentials=secret searchbase="cn=config" type=refreshAndPersist
+#        retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=003 provider=$URI3 binddn="cn=config" bindmethod=simple
+#        credentials=secret searchbase="cn=config" type=refreshAndPersist
+#        retry="5 5 300 5" timeout=1
+#      -
+#      add: olcMirrorMode
+#      olcMirrorMode: TRUE
+# Now start up the provider and a consumer/s, also add the above LDIF to the first consumer, second consumer etc. It will then replicate cn=config. You now have N-Way Multi-Provider on the config database.
+# 
+# We still have to replicate the actual data, not just the config, so add to the provider (all active and configured consumers/providers will pull down this config, as they are all syncing). Also, replace all ${} variables with whatever is applicable to your setup:
+# 
+#      dn: olcDatabase={1}$BACKEND,cn=config
+#      objectClass: olcDatabaseConfig
+#      objectClass: olc${BACKEND}Config
+#      olcDatabase: {1}$BACKEND
+#      olcSuffix: $BASEDN
+#      olcDbDirectory: ./db
+#      olcRootDN: $MANAGERDN
+#      olcRootPW: $PASSWD
+#      olcLimits: dn.exact="$MANAGERDN" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited
+#      olcSyncRepl: rid=004 provider=$URI1 binddn="$MANAGERDN" bindmethod=simple
+#        credentials=$PASSWD searchbase="$BASEDN" type=refreshOnly
+#        interval=00:00:00:10 retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=005 provider=$URI2 binddn="$MANAGERDN" bindmethod=simple
+#        credentials=$PASSWD searchbase="$BASEDN" type=refreshOnly
+#        interval=00:00:00:10 retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=006 provider=$URI3 binddn="$MANAGERDN" bindmethod=simple
+#        credentials=$PASSWD searchbase="$BASEDN" type=refreshOnly
+#        interval=00:00:00:10 retry="5 5 300 5" timeout=1
+#      olcMirrorMode: TRUE
+# 
+
+- name: Ensure TODO
+  become: true
+  ldap_attrs:
+    dn: '{{ slapd_olcDatabase_type_dn }}'
+    objectClass:
+      - olcDatabaseConfig
+      - olc{{ slapd_db_type }}Config
+    attributes:
+      olcDatabase: '{{ slapd_db_type }}'  # TODO
+      olcSuffix: '{{ slapd_basedn }}'
+
+## The following line was defined by module-syncprov.yml
+
+#      dn: olcOverlay=syncprov,olcDatabase={1}${BACKEND},cn=config
+#      changetype: add
+#      objectClass: olcOverlayConfig
+#      objectClass: olcSyncProvConfig
+#      olcOverlay: syncprov
