@@ -74,10 +74,10 @@
     slapd_daemon: "{{ __slapd_daemon }}"
   when: slapd_daemon is not defined
 
-# Set ldap_admin_basedn to ldap_basedn then it does not defined.
+# Set ldap_admin_basedn to ldap_admin + ldap_basedn then it does not defined.
 - name: Define ldap_admin_basedn
   set_fact:
-    ldap_admin_basedn: "{{ ldap_basedn }}"
+    ldap_admin_basedn: "{{ ldap_admin }},{{ ldap_basedn }}"
   when: ldap_admin_basedn is not defined
 
 - name: Define slapd_conf_file
