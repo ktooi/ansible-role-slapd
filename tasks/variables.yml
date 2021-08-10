@@ -6,6 +6,8 @@
         - "vars/{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
         - "vars/{{ ansible_os_family }}.yml"
       skip: true
+  tags:
+    - always
 
 - name: Define ldap_base_head
   set_fact:
@@ -13,6 +15,8 @@
       {%- set r = ldap_basedn.split(',')[0].split('=')[1] -%}
       {{ r }}
   when: ldap_base_head is not defined
+  tags:
+    - always
 
 - name: Define ldap_domain
   set_fact:
@@ -23,89 +27,125 @@
       {%- endfor -%}
       {{ r | join('.') }}
   when: ldap_domain is not defined
+  tags:
+    - always
 
 - name: Define ldap_server_packages
   set_fact:
     ldap_server_packages: "{{ __ldap_server_packages | list }}"
   when: ldap_server_packages is not defined
+  tags:
+    - always
 
 - name: Define ldap_python_modules
   set_fact:
     ldap_python_modules: "{{ __ldap_python_modules | list }}"
   when: ldap_python_modules is not defined
+  tags:
+    - always
 
 - name: Define ldap_python_modules_pip
   set_fact:
     ldap_python_modules_pip: "{{ __ldap_python_modules_pip | list }}"
   when: ldap_python_modules_pip is not defined
+  tags:
+    - always
 
 - name: Define slapd_install_python_module_via_pip
   set_fact:
     slapd_install_python_module_via_pip: "{{ __slapd_install_python_module_via_pip }}"
   when: slapd_install_python_module_via_pip is not defined
+  tags:
+    - always
 
 - name: Define ldap_owner
   set_fact:
     ldap_owner: "{{ __ldap_owner }}"
   when: ldap_owner is not defined
+  tags:
+    - always
 
 - name: Define ldap_group
   set_fact:
     ldap_group: "{{ __ldap_group }}"
   when: ldap_group is not defined
+  tags:
+    - always
 
 - name: Define ldap_conf_file
   set_fact:
     ldap_conf_file: "{{ __ldap_conf_file }}"
   when: ldap_conf_file is not defined
+  tags:
+    - always
 
 - name: Define ldap_cmd_ldapmodify
   set_fact:
     ldap_cmd_ldapmodify: "{{ __ldap_cmd_ldapmodify }}"
   when: ldap_cmd_ldapmodify is not defined
+  tags:
+    - always
 
 - name: Define ldap_cmd_ldapadd
   set_fact:
     ldap_cmd_ldapadd: "{{ __ldap_cmd_ldapadd }}"
   when: ldap_cmd_ldapadd is not defined
+  tags:
+    - always
 
 - name: Define slapd_daemon
   set_fact:
     slapd_daemon: "{{ __slapd_daemon }}"
   when: slapd_daemon is not defined
+  tags:
+    - always
 
 # Set ldap_admin_basedn to ldap_admin + ldap_basedn then it does not defined.
 - name: Define ldap_admin_basedn
   set_fact:
     ldap_admin_basedn: "{{ ldap_admin }},{{ ldap_basedn }}"
   when: ldap_admin_basedn is not defined
+  tags:
+    - always
 
 - name: Define slapd_conf_file
   set_fact:
     slapd_conf_file: "{{ __slapd_conf_file }}"
   when: slapd_conf_file is not defined
+  tags:
+    - always
 
 - name: Define slapd_module_path
   set_fact:
     slapd_module_path: "{{ __slapd_module_path }}"
   when: slapd_module_path is not defined
+  tags:
+    - always
 
 - name: Define slapd_db_type
   set_fact:
     slapd_db_type: "{{ __slapd_db_type }}"
   when: slapd_db_type is not defined
+  tags:
+    - always
 
 - name: Define slapd_cmd_slappasswd
   set_fact:
     slapd_cmd_slappasswd: "{{ __slapd_cmd_slappasswd }}"
   when: slapd_cmd_slappasswd is not defined
+  tags:
+    - always
 
 - name: Define slapd_cmd_slapcat
   set_fact:
     slapd_cmd_slapcat: "{{ __slapd_cmd_slapcat }}"
   when: slapd_cmd_slapcat is not defined
+  tags:
+    - always
 
 - name: Define ldap_admin_dn
   set_fact:
     ldap_admin_dn: "{{ ldap_admin }},{{ ldap_admin_basedn }}"
   when: ldap_admin_dn is not defined
+  tags:
+    - always

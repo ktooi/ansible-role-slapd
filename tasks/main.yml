@@ -1,5 +1,7 @@
 ---
 - include_tasks: "variables.yml"
+  tags:
+    - always
 - include_tasks: "{{ item }}"
   with_first_found:
     - files:
@@ -7,6 +9,8 @@
         - "setup-{{ ansible_os_family }}.yml"
 - include_tasks: "variables-hashed-passwd.yml"
 - include_tasks: "variables-database-type.yml"
+  tags:
+    - always
 - include_tasks: "configure.yml"
 - include_tasks: "configure-global-options.yml"
 - include_tasks: "configure-basedn.yml"
