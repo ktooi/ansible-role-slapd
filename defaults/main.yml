@@ -38,6 +38,7 @@ ldap_organization_name: Example Co., Ltd.
 # ldap_tls_crlcheck: <level>
 # ldap_tls_crlfile: <filename>
 
+slapd_protocol: 'ldap'
 # Set this to the slapd global configurations.
 slapd_loglevel: stats
 # slapd_idletimeout: 86400

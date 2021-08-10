@@ -1,4 +1,128 @@
 ---
+- name: Define slapd_replication_servers
+  set_fact:
+    slapd_replication_servers: '{{ groups[slapd_replication_group] | list }}'
+  when: slapd_replication_servers is not defined
+  tags:
+    - slapd_replication
+
+- debug:
+    msg: '{{ slapd_replication_servers }}'
+  tags:
+    - never
+    - debug
+
+- name: Define slapd_replicaton_server_id
+  set_fact:
+    slapd_replication_server_id: >-
+      {%- for server in slapd_replication_servers -%}
+      {%-   if server == inventory_hostname -%}
+      {{ loop.index }}
+      {%-   endif -%}
+      {%- endfor -%}
+  # The slapd_replication_server_id isn't able to manual specific.
+  # Because it has to match server group index.
+  # when: slapd_replication_server_id is not defined
+  tags:
+    - slapd_replication
+
+- debug:
+    msg: '{{ slapd_replication_server_id }}'
+  tags:
+    - never
+    - debug
+
+- name: Define slapd_replication_target_list
+  set_fact:
+    slapd_replication_target_list: >-
+      {%- set r = [] -%}
+      {%- for server in slapd_replication_servers -%}
+      {%-   set _ = r.append({'id': loop.index, 'url': slapd_protocol + '://' + server}) -%}
+      {%- endfor -%}
+      {{ r | list }}
+  when: slapd_replication_target_list is not defined
+  tags:
+    - slapd_replication
+
+- debug:
+    msg: '{{ slapd_replication_target_list }}'
+  tags:
+    - never
+    - debug
+
+- name: Define slapd_replication_id_url_list
+  set_fact:
+    slapd_replication_id_url_list: >-
+      {%- set r = [slapd_replication_server_id] -%}
+      {%- for target in slapd_replication_target_list -%}
+      {%-   set _ = r.append(target['id'] | string + ' ' + target['url']) -%}
+      {%- endfor -%}
+      {{ r | list }}
+  when: slapd_replication_id_url_list is not defined
+  tags:
+    - slapd_replication
+
+- debug:
+    msg: '{{ slapd_replication_id_url_list }}'
+  tags:
+    - never
+    - debug
+
+#      olcSyncRepl: rid=001 provider=$URI1 binddn="cn=config" bindmethod=simple
+#        credentials=secret searchbase="cn=config" type=refreshAndPersist
+#        retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=002 provider=$URI2 binddn="cn=config" bindmethod=simple
+#        credentials=secret searchbase="cn=config" type=refreshAndPersist
+#        retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=003 provider=$URI3 binddn="cn=config" bindmethod=simple
+#        credentials=secret searchbase="cn=config" type=refreshAndPersist
+#        retry="5 5 300 5" timeout=1
+- name: Define slapd_replication_sync_conf_list
+  set_fact:
+    slapd_replication_sync_conf_list: >-
+      {%- set r = [] -%}
+      {%- for target in slapd_replication_target_list -%}
+      {%-   set _ = r.append('rid={rid:03} provider={url} binddn="cn=config" bindmethod=simple retry="5 5 300" timeout=1'.format(rid=loop.index, url=target['url'])) -%}
+      {%- endfor -%}
+      {{ r | list }}
+  when: slapd_replication_sync_conf_list is not defined
+  tags:
+    - slapd_replication
+
+- debug:
+    msg: '{{ slapd_replication_sync_conf_list }}'
+  tags:
+    - never
+    - debug
+
+#      olcSyncRepl: rid=004 provider=$URI1 binddn="$MANAGERDN" bindmethod=simple
+#        credentials=$PASSWD searchbase="$BASEDN" type=refreshOnly
+#        interval=00:00:00:10 retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=005 provider=$URI2 binddn="$MANAGERDN" bindmethod=simple
+#        credentials=$PASSWD searchbase="$BASEDN" type=refreshOnly
+#        interval=00:00:00:10 retry="5 5 300 5" timeout=1
+#      olcSyncRepl: rid=006 provider=$URI3 binddn="$MANAGERDN" bindmethod=simple
+#        credentials=$PASSWD searchbase="$BASEDN" type=refreshOnly
+#        interval=00:00:00:10 retry="5 5 300 5" timeout=1
+- name: Define slapd_replication_sync_db_list
+  set_fact:
+    slapd_replication_sync_db_list: >-
+      {%- set r = [] -%}
+      {%- for target in slapd_replication_target_list -%}
+      {%-   set _ = r.append('rid={rid:03} provider={url} binddn={binddn} bindmethod=simple credentials={passwd} searchbase="{basedn}" type=refreshOnly'.format(rid=slapd_replication_sync_conf_list | length + loop.index, url=target['url'], binddn=ldap_admin_basedn, passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
+      {%- endfor -%}
+      {{ r | list }}
+  when: slapd_replication_sync_db_list is not defined
+  tags:
+    - slapd_replication
+
+
+- debug:
+    msg: '{{ slapd_replication_sync_db_list }}'
+  tags:
+    - never
+    - debug
+
 # https://www.openldap.org/doc/admin24/replication.html#N-Way%20Multi-Provider
 
 # For the following example we will be using 3 Provider nodes. Keeping in line with test050-syncrepl-multiprovider of the OpenLDAP test suite, we will be configuring slapd(8) via cn=config
@@ -30,11 +154,11 @@
   become: true
   ldap_attrs:
     dn: "cn=config"
-    objectClass:
-      - olcGlobal
     attributes:
-      olcServerID: "{{ TODO }}"  # TODO
+      olcServerID: '{{ slapd_replication_server_id }}'
     state: exact
+  tags:
+    - slapd_replication
 
 
 ## The following line was defined by module-syncprov.yml
@@ -57,6 +181,15 @@
 #      olcServerID: 2 $URI2
 #      olcServerID: 3 $URI3
 # 
+- name: 
+  become: true
+  ldap_attrs:
+    dn: "cn=config"
+    attributes:
+      olcServerID: '{{ slapd_replication_id_url_list }}'
+    state: exact
+  tags:
+    - slapd_replication
 
 
 ## The following line was defined by module-syncprov.yml
@@ -85,6 +218,16 @@
 #      add: olcMirrorMode
 #      olcMirrorMode: TRUE
 # Now start up the provider and a consumer/s, also add the above LDIF to the first consumer, second consumer etc. It will then replicate cn=config. You now have N-Way Multi-Provider on the config database.
+- name: TODO
+  become: true
+  ldap_attrs:
+    dn: 'olcDatabase={0}config,cn=config'
+    attributes:
+      olcSyncRepl: '{{ slapd_replication_sync_conf_list }}'
+      olcMirrorMode: 'TRUE'
+    state: exact
+  tags:
+    - slapd_replication
 # 
 # We still have to replicate the actual data, not just the config, so add to the provider (all active and configured consumers/providers will pull down this config, as they are all syncing). Also, replace all ${} variables with whatever is applicable to your setup:
 # 
@@ -113,12 +256,13 @@
   become: true
   ldap_attrs:
     dn: '{{ slapd_olcDatabase_type_dn }}'
-    objectClass:
-      - olcDatabaseConfig
-      - olc{{ slapd_db_type }}Config
     attributes:
-      olcDatabase: '{{ slapd_db_type }}'  # TODO
-      olcSuffix: '{{ slapd_basedn }}'
+      olcLimits: 'dn.exact="{{ ldap_admin_basedn }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited'
+      olcSuffix: '{{ slapd_replication_sync_db_list }}'
+      olcMirrorMode: 'TRUE'
+    state: exact
+  tags:
+    - slapd_replication
 
 ## The following line was defined by module-syncprov.yml
 
