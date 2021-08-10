@@ -1,3 +1,5 @@
+[![CI](https://github.com/ktooi/ansible-role-slapd/workflows/CI/badge.svg)](https://github.com/ktooi/ansible-role-slapd/actions?query=workflow%3ACI+branch%3Amain)
+
 # Ansible Role: slapd
 
 RHEL/CentOS, Debian/Ubuntu サーバに slapd をインストールし、基本的な設定を行います。

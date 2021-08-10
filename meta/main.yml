@@ -23,3 +23,5 @@ galaxy_info:
         - all
   galaxy_tags:
     - ldap
+    - openldap
+    - slapd
