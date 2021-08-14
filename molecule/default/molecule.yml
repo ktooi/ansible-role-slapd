@@ -31,6 +31,8 @@ provisioner:
         slapd_install_module_refint: true
         slapd_install_module_memberof: true
         slapd_install_module_syncprov: true
+
+        slapd_replication: true
       centos7:
         slapd_install_module_refint: false
         slapd_install_module_memberof: false
