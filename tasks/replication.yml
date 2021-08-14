@@ -53,7 +53,7 @@
 - name: Define slapd_replication_id_url_list
   set_fact:
     slapd_replication_id_url_list: >-
-      {%- set r = [slapd_replication_server_id] -%}
+      {%- set r = [] -%}
       {%- for target in slapd_replication_target_list -%}
       {%-   set _ = r.append(target['id'] | string + ' ' + target['url']) -%}
       {%- endfor -%}
@@ -150,15 +150,15 @@
 #      olcDatabase: {0}config
 #      olcRootPW: secret
 
-- name: Ensure slapd of global config options included olcServerID
-  become: true
-  ldap_attrs:
-    dn: "cn=config"
-    attributes:
-      olcServerID: '{{ slapd_replication_server_id }}'
-    state: exact
-  tags:
-    - slapd_replication
+#- name: Ensure slapd of global config options included olcServerID
+#  become: true
+#  ldap_attrs:
+#    dn: "cn=config"
+#    attributes:
+#      olcServerID: '{{ slapd_replication_server_id }}'
+#    state: exact
+#  tags:
+#    - slapd_replication
 
 
 ## The following line was defined by module-syncprov.yml
@@ -181,13 +181,13 @@
 #      olcServerID: 2 $URI2
 #      olcServerID: 3 $URI3
 # 
-- name: 
+- name: Ensure slapd of global config options included olcServerID
   become: true
   ldap_attrs:
     dn: "cn=config"
     attributes:
       olcServerID: '{{ slapd_replication_id_url_list }}'
-    state: exact
+    state: present
   tags:
     - slapd_replication
 
@@ -224,8 +224,17 @@
     dn: 'olcDatabase={0}config,cn=config'
     attributes:
       olcSyncRepl: '{{ slapd_replication_sync_conf_list }}'
+    state: present
+  tags:
+    - slapd_replication
+
+- name: TODO
+  become: true
+  ldap_attrs:
+    dn: 'olcDatabase={0}config,cn=config'
+    attributes:
       olcMirrorMode: 'TRUE'
-    state: exact
+    state: present
   tags:
     - slapd_replication
 # 
@@ -259,8 +268,17 @@
     attributes:
       olcLimits: 'dn.exact="{{ ldap_admin_basedn }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited'
       olcSuffix: '{{ slapd_replication_sync_db_list }}'
+    state: present
+  tags:
+    - slapd_replication
+
+- name: Ensure TODO
+  become: true
+  ldap_attrs:
+    dn: '{{ slapd_olcDatabase_type_dn }}'
+    attributes:
       olcMirrorMode: 'TRUE'
-    state: exact
+    state: present
   tags:
     - slapd_replication
 
