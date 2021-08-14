@@ -47,6 +47,7 @@ slapd_loglevel: stats
 
 # Set this to the replication of the slapd
 slapd_replication: false
+slapd_replication_group: 'slapd'
 slapd_replication_uri_list:
   - "ldap://ldap1.example.com"
   - "ldap://ldap2.example.com"
