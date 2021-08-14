@@ -33,6 +33,12 @@ provisioner:
         slapd_install_module_syncprov: true
 
         slapd_replication: true
+        slapd_replication_group: ${MOLECULE_DISTRO:-ubuntu2004}
+        slapd_replication_target_list:
+          - id: 1
+            url: 'ldap://ldap01.test.example.com'
+          - id: 2
+            url: 'ldap://ldap02.test.example.com'
       centos7:
         slapd_install_module_refint: false
         slapd_install_module_memberof: false
