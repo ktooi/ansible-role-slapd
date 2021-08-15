@@ -81,8 +81,9 @@
   set_fact:
     slapd_replication_sync_conf_list: >-
       {%- set r = [] -%}
+      {%- set stmt = 'rid={rid:03} provider={url} binddn="cn=config" bindmethod=simple retry="5 5 300" timeout=1' -%}
       {%- for target in slapd_replication_target_list -%}
-      {%-   set _ = r.append('rid={rid:03} provider={url} binddn="cn=config" bindmethod=simple retry="5 5 300" timeout=1'.format(rid=loop.index, url=target['url'])) -%}
+      {%-   set _ = r.append(stmt.format(rid=loop.index, url=target['url'])) -%}
       {%- endfor -%}
       {{ r | list }}
   when: slapd_replication_sync_conf_list is not defined
@@ -108,8 +109,9 @@
   set_fact:
     slapd_replication_sync_db_list: >-
       {%- set r = [] -%}
+      {%- set stmt = 'rid={rid:03} provider={url} binddn="{binddn}" bindmethod=simple credentials={passwd} searchbase="{basedn}" type=refreshOnly' -%}
       {%- for target in slapd_replication_target_list -%}
-      {%-   set _ = r.append('rid={rid:03} provider={url} binddn={binddn} bindmethod=simple credentials={passwd} searchbase="{basedn}" type=refreshOnly'.format(rid=slapd_replication_sync_conf_list | length + loop.index, url=target['url'], binddn=ldap_admin_basedn, passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
+      {%-   set _ = r.append(stmt.format(rid=slapd_replication_sync_conf_list | length + loop.index, url=target['url'], binddn=ldap_admin_basedn, passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
       {%- endfor -%}
       {{ r | list }}
   when: slapd_replication_sync_db_list is not defined
@@ -223,20 +225,21 @@
   ldap_attrs:
     dn: 'olcDatabase={0}config,cn=config'
     attributes:
-      olcSyncRepl: '{{ slapd_replication_sync_conf_list }}'
-    state: present
-  tags:
-    - slapd_replication
-
-- name: TODO
-  become: true
-  ldap_attrs:
-    dn: 'olcDatabase={0}config,cn=config'
-    attributes:
-      olcMirrorMode: 'TRUE'
+      olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
     state: exact
   tags:
     - slapd_replication
+    - molecule-idempotence-notest
+
+#- name: TODO
+#  become: true
+#  ldap_attrs:
+#    dn: 'olcDatabase={0}config,cn=config'
+#    attributes:
+#      olcMirrorMode: 'TRUE'
+#    state: present
+#  tags:
+#    - slapd_replication
 # 
 # We still have to replicate the actual data, not just the config, so add to the provider (all active and configured consumers/providers will pull down this config, as they are all syncing). Also, replace all ${} variables with whatever is applicable to your setup:
 # 
@@ -267,10 +270,11 @@
     dn: '{{ slapd_olcDatabase_type_dn }}'
     attributes:
       olcLimits: 'dn.exact="{{ ldap_admin_basedn }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited'
-      olcSuffix: '{{ slapd_replication_sync_db_list }}'
-    state: present
+      olcSyncrepl: '{{ slapd_replication_sync_db_list }}'
+    state: exact
   tags:
     - slapd_replication
+    - molecule-idempotence-notest
 
 - name: Ensure TODO
   become: true
