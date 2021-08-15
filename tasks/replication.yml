@@ -160,15 +160,15 @@
 #      olcDatabase: {0}config
 #      olcRootPW: secret
 
-#- name: Ensure slapd of global config options included olcServerID
-#  become: true
-#  ldap_attrs:
-#    dn: "cn=config"
-#    attributes:
-#      olcServerID: '{{ slapd_replication_server_id }}'
-#    state: exact
-#  tags:
-#    - slapd_replication
+# - name: Ensure slapd of global config options included olcServerID
+#   become: true
+#   ldap_attrs:
+#     dn: "cn=config"
+#     attributes:
+#       olcServerID: '{{ slapd_replication_server_id }}'
+#     state: exact
+#   tags:
+#     - slapd_replication
 
 
 ## The following line was defined by module-syncprov.yml
