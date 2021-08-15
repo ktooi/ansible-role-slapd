@@ -234,7 +234,7 @@
     dn: 'olcDatabase={0}config,cn=config'
     attributes:
       olcMirrorMode: 'TRUE'
-    state: present
+    state: exact
   tags:
     - slapd_replication
 # 
@@ -278,7 +278,7 @@
     dn: '{{ slapd_olcDatabase_type_dn }}'
     attributes:
       olcMirrorMode: 'TRUE'
-    state: present
+    state: exact
   tags:
     - slapd_replication
 
