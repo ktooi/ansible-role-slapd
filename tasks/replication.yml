@@ -136,25 +136,25 @@
 
 # For the following example we will be using 3 Provider nodes. Keeping in line
 # with test050-syncrepl-multiprovider of the OpenLDAP test suite, we will be configuring slapd(8) via cn=config
-# 
+#
 # This sets up the config database:
-# 
+#
 #      dn: cn=config
 #      objectClass: olcGlobal
 #      cn: config
 #      olcServerID: 1
-# 
+#
 #      dn: olcDatabase={0}config,cn=config
 #      objectClass: olcDatabaseConfig
 #      olcDatabase: {0}config
 #      olcRootPW: secret
 # second and third servers will have a different olcServerID obviously:
-# 
+#
 #      dn: cn=config
 #      objectClass: olcGlobal
 #      cn: config
 #      olcServerID: 2
-# 
+#
 #      dn: olcDatabase={0}config,cn=config
 #      objectClass: olcDatabaseConfig
 #      olcDatabase: {0}config
@@ -174,7 +174,7 @@
 ## The following line was defined by module-syncprov.yml
 
 # This sets up syncrepl as a provider (since these are all providers):
-# 
+#
 #      dn: cn=module,cn=config
 #      objectClass: olcModuleList
 #      cn: module
@@ -183,14 +183,14 @@
 
 
 # Now we setup the first Provider Node (replace $URI1, $URI2 and $URI3 etc. with your actual ldap urls):
-# 
+#
 #      dn: cn=config
 #      changetype: modify
 #      replace: olcServerID
 #      olcServerID: 1 $URI1
 #      olcServerID: 2 $URI2
 #      olcServerID: 3 $URI3
-# 
+#
 - name: Ensure slapd of global config options included olcServerID
   become: true
   ldap_attrs:
@@ -211,7 +211,7 @@
 #      olcOverlay: syncprov
 
 
-# 
+#
 #      dn: olcDatabase={0}config,cn=config
 #      changetype: modify
 #      add: olcSyncRepl
@@ -240,20 +240,20 @@
     - slapd_replication
     - molecule-idempotence-notest
 
-#- name: TODO
-#  become: true
-#  ldap_attrs:
-#    dn: 'olcDatabase={0}config,cn=config'
-#    attributes:
-#      olcMirrorMode: 'TRUE'
-#    state: present
-#  tags:
-#    - slapd_replication
-# 
+# - name: TODO
+#   become: true
+#   ldap_attrs:
+#     dn: 'olcDatabase={0}config,cn=config'
+#     attributes:
+#       olcMirrorMode: 'TRUE'
+#     state: present
+#   tags:
+#     - slapd_replication
+#
 # We still have to replicate the actual data, not just the config, so add to the provider
 # (all active and configured consumers/providers will pull down this config, as they are all syncing).
 # Also, replace all ${} variables with whatever is applicable to your setup:
-# 
+#
 #      dn: olcDatabase={1}$BACKEND,cn=config
 #      objectClass: olcDatabaseConfig
 #      objectClass: olc${BACKEND}Config
@@ -273,7 +273,7 @@
 #        credentials=$PASSWD searchbase="$BASEDN" type=refreshOnly
 #        interval=00:00:00:10 retry="5 5 300 5" timeout=1
 #      olcMirrorMode: TRUE
-# 
+#
 
 - name: Start up the provider and a consumer/s on the backend
   become: true
