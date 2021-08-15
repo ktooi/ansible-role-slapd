@@ -109,9 +109,12 @@
   set_fact:
     slapd_replication_sync_db_list: >-
       {%- set r = [] -%}
-      {%- set stmt = 'rid={rid:03} provider={url} binddn="{binddn}" bindmethod=simple credentials={passwd} searchbase="{basedn}" type=refreshOnly' -%}
+      {%- set stmt = 'rid={rid:03} provider={url} binddn="{binddn}" bindmethod=simple credentials={passwd} '
+                     'searchbase="{basedn}" type=refreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1' -%}
       {%- for target in slapd_replication_target_list -%}
-      {%-   set _ = r.append(stmt.format(rid=slapd_replication_sync_conf_list | length + loop.index, url=target['url'], binddn=ldap_admin_basedn, passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
+      {%-   set rid = slapd_replication_sync_conf_list | length + loop.index -%}
+      {%-   set _ = r.append(stmt.format(rid=rid, url=target['url'], binddn=ldap_admin_basedn,
+                                         passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
       {%- endfor -%}
       {{ r | list }}
   when: slapd_replication_sync_db_list is not defined
@@ -127,7 +130,8 @@
 
 # https://www.openldap.org/doc/admin24/replication.html#N-Way%20Multi-Provider
 
-# For the following example we will be using 3 Provider nodes. Keeping in line with test050-syncrepl-multiprovider of the OpenLDAP test suite, we will be configuring slapd(8) via cn=config
+# For the following example we will be using 3 Provider nodes. Keeping in line
+# with test050-syncrepl-multiprovider of the OpenLDAP test suite, we will be configuring slapd(8) via cn=config
 # 
 # This sets up the config database:
 # 
@@ -219,8 +223,9 @@
 #      -
 #      add: olcMirrorMode
 #      olcMirrorMode: TRUE
-# Now start up the provider and a consumer/s, also add the above LDIF to the first consumer, second consumer etc. It will then replicate cn=config. You now have N-Way Multi-Provider on the config database.
-- name: TODO
+# Now start up the provider and a consumer/s, also add the above LDIF to the first consumer, second consumer etc.
+# It will then replicate cn=config. You now have N-Way Multi-Provider on the config database.
+- name: Start up the provider and a consumer/s on the config database
   become: true
   ldap_attrs:
     dn: 'olcDatabase={0}config,cn=config'
@@ -241,7 +246,9 @@
 #  tags:
 #    - slapd_replication
 # 
-# We still have to replicate the actual data, not just the config, so add to the provider (all active and configured consumers/providers will pull down this config, as they are all syncing). Also, replace all ${} variables with whatever is applicable to your setup:
+# We still have to replicate the actual data, not just the config, so add to the provider
+# (all active and configured consumers/providers will pull down this config, as they are all syncing).
+# Also, replace all ${} variables with whatever is applicable to your setup:
 # 
 #      dn: olcDatabase={1}$BACKEND,cn=config
 #      objectClass: olcDatabaseConfig
@@ -264,12 +271,14 @@
 #      olcMirrorMode: TRUE
 # 
 
-- name: Ensure TODO
+- name: Start up the provider and a consumer/s on the backend
   become: true
   ldap_attrs:
     dn: '{{ slapd_olcDatabase_type_dn }}'
     attributes:
-      olcLimits: 'dn.exact="{{ ldap_admin_basedn }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited'
+      olcLimits: >-
+        dn.exact="{{ ldap_admin_basedn }}" time.soft=unlimited time.hard=unlimited
+        size.soft=unlimited size.hard=unlimited
       olcSyncrepl: '{{ slapd_replication_sync_db_list }}'
     state: exact
   tags:
