@@ -6,7 +6,8 @@
   tags:
     - slapd_replication
 
-- debug:
+- name: 'Debug: Show slapd_replication_servers'
+  debug:
     msg: '{{ slapd_replication_servers }}'
   tags:
     - never
@@ -20,13 +21,12 @@
       {{ loop.index }}
       {%-   endif -%}
       {%- endfor -%}
-  # The slapd_replication_server_id isn't able to manual specific.
-  # Because it has to match server group index.
-  # when: slapd_replication_server_id is not defined
+  when: slapd_replication_server_id is not defined
   tags:
     - slapd_replication
 
-- debug:
+- name: 'Debug: Show slapd_replication_server_id'
+  debug:
     msg: '{{ slapd_replication_server_id }}'
   tags:
     - never
@@ -44,7 +44,8 @@
   tags:
     - slapd_replication
 
-- debug:
+- name: 'Debug: Show slapd_replication_target_list'
+  debug:
     msg: '{{ slapd_replication_target_list }}'
   tags:
     - never
@@ -62,7 +63,8 @@
   tags:
     - slapd_replication
 
-- debug:
+- name: 'Debug: Show slapd_replication_id_url_list'
+  debug:
     msg: '{{ slapd_replication_id_url_list }}'
   tags:
     - never
@@ -90,7 +92,8 @@
   tags:
     - slapd_replication
 
-- debug:
+- name: 'Debug: Show slapd_replication_sync_conf_list'
+  debug:
     msg: '{{ slapd_replication_sync_conf_list }}'
   tags:
     - never
@@ -122,7 +125,8 @@
     - slapd_replication
 
 
-- debug:
+- name: 'Debug: Show slapd_replication_sync_db_list'
+  debug:
     msg: '{{ slapd_replication_sync_db_list }}'
   tags:
     - never
