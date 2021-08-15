@@ -229,7 +229,7 @@
 #      olcMirrorMode: TRUE
 # Now start up the provider and a consumer/s, also add the above LDIF to the first consumer, second consumer etc.
 # It will then replicate cn=config. You now have N-Way Multi-Provider on the config database.
-- name: Start up the provider and a consumer/s on the config database
+- name: Start up the provider and a consumer/s on the config database (1/2)
   become: true
   ldap_attrs:
     dn: 'olcDatabase={0}config,cn=config'
@@ -240,13 +240,13 @@
     - slapd_replication
     - molecule-idempotence-notest
 
-# - name: TODO
+# - name: Start up the provider and a consumer/s on the config database (2/2)
 #   become: true
 #   ldap_attrs:
 #     dn: 'olcDatabase={0}config,cn=config'
 #     attributes:
 #       olcMirrorMode: 'TRUE'
-#     state: present
+#     state: exact
 #   tags:
 #     - slapd_replication
 #
@@ -275,7 +275,7 @@
 #      olcMirrorMode: TRUE
 #
 
-- name: Start up the provider and a consumer/s on the backend
+- name: Start up the provider and a consumer/s on the backend (1/2)
   become: true
   ldap_attrs:
     dn: '{{ slapd_olcDatabase_type_dn }}'
@@ -289,7 +289,7 @@
     - slapd_replication
     - molecule-idempotence-notest
 
-- name: Ensure TODO
+- name: Start up the provider and a consumer/s on the backend (2/2)
   become: true
   ldap_attrs:
     dn: '{{ slapd_olcDatabase_type_dn }}'
