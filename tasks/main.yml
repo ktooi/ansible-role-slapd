@@ -19,10 +19,10 @@
   when: slapd_install_module_memberof
 - include_tasks: "module-refint.yml"
   when: slapd_install_module_refint or slapd_install_module_memberof
-  tags:
-    - slapd_replication
 - include_tasks: "module-syncprov.yml"
   when: slapd_install_module_syncprov
+  tags:
+    - slapd_replication
 - include_tasks: "schema-cosine.yml"
   when: slapd_install_schema_cosine or slapd_install_schema_nis
 - include_tasks: "schema-nis.yml"
