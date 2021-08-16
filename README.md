@@ -97,6 +97,13 @@ slapd_overlay_syncprov_dn: null
 デフォルトでは自動的に適切な DN を選択します。
 何らかの不都合がある場合にのみ指定してください。
 
+```yaml
+slapd_replication: false
+```
+
+[N-Way Multi-Provider](https://www.openldap.org/doc/admin24/replication.html#N-Way%20Multi-Provider) 方式のレプリケーションを設定する場合に `true` を指定してください。
+RHEL/CentOS 7 ではタスクに失敗するのでこの変数を `true` に設定してはいけません。
+
 ## Dependencies
 
 None.
