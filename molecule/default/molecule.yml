@@ -43,6 +43,7 @@ provisioner:
         slapd_install_module_refint: false
         slapd_install_module_memberof: false
         slapd_install_module_syncprov: false
+        slapd_replication: false
 
 verifier:
   name: ansible
