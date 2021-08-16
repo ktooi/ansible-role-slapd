@@ -20,7 +20,7 @@
 - include_tasks: "module-refint.yml"
   when: slapd_install_module_refint or slapd_install_module_memberof
 - include_tasks: "module-syncprov.yml"
-  when: slapd_install_module_syncprov
+  when: slapd_install_module_syncprov or slapd_replication
   tags:
     - slapd_replication
 - include_tasks: "schema-cosine.yml"
