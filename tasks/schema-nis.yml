@@ -8,6 +8,7 @@
     filter: "(&(cn={*}nis)(objectClass=olcSchemaConfig))"
   check_mode: false
   register: schema_nis
+  when: slapd_schema_nis_dn is not defined
 
 - name: Define slapd_schema_nis_dn
   set_fact:

@@ -8,6 +8,7 @@
     filter: "(&(cn={*}ssh-lpk)(objectClass=olcSchemaConfig))"
   check_mode: false
   register: schema_lpk
+  when: slapd_schema_lpk_dn is not defined
 
 - name: Define slapd_schema_lpk_dn
   set_fact:

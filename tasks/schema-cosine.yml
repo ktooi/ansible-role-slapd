@@ -8,6 +8,7 @@
     filter: "(&(cn={*}cosine)(objectClass=olcSchemaConfig))"
   check_mode: false
   register: schema_cosine
+  when: slapd_schema_cosine_dn is not defined
 
 - name: Define slapd_schema_cosine_dn
   set_fact:

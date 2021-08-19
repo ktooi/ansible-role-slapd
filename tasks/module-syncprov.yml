@@ -7,6 +7,7 @@
     filter: "(&(objectClass=olcModuleList)(olcModuleLoad=syncprov.la))"
   check_mode: false
   register: module_syncprov
+  when: slapd_module_syncprov_dn is not defined
 
 - name: Define slapd_module_syncprov_dn
   set_fact:
@@ -40,6 +41,7 @@
     filter: "(&(olcOverlay=syncprov)(objectClass=olcsyncprovConfig))"
   check_mode: false
   register: overlay_syncprov_config
+  when: slapd_overlay_syncprov_config_dn is not defined
 
 - name: Define slapd_overlay_syncprov_config_dn
   set_fact:
@@ -70,6 +72,7 @@
     filter: "(&(olcOverlay=syncprov)(objectClass=olcsyncprovConfig))"
   check_mode: false
   register: overlay_syncprov
+  when: slapd_overlay_syncprov_dn is not defined
 
 - name: Define slapd_overlay_syncprov_dn
   set_fact:

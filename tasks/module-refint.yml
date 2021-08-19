@@ -7,6 +7,7 @@
     filter: "(&(objectClass=olcModuleList)(olcModuleLoad=refint.la))"
   check_mode: false
   register: module_refint
+  when: slapd_module_refint_dn is not defined
 
 - name: Define slapd_module_refint_dn
   set_fact:
@@ -40,6 +41,7 @@
     filter: "(&(olcOverlay=refint)(objectClass=olcRefintConfig))"
   check_mode: false
   register: overlay_refint
+  when: slapd_overlay_refint_dn is not defined
 
 - name: Define slapd_overlay_refint_dn
   set_fact:
