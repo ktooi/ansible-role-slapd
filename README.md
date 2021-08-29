@@ -4,6 +4,19 @@
 
 RHEL/CentOS, Debian/Ubuntu サーバに slapd をインストールし、基本的な設定を行います。
 
+この role では次のことを行います。
+
+* LDAP サーバのインストール
+* LDAP サーバの基本設定
+* BaseDN の設定
+* 管理者権限の設定
+* スキーマのインポート
+* モジュールのインポート
+
+この role では次のことを行いません。
+
+* アカウントやグループなどのエントリ情報の登録
+
 ## Requirements
 
 この role には特別な要件はありません。
@@ -97,12 +110,24 @@ slapd_overlay_syncprov_dn: null
 デフォルトでは自動的に適切な DN を選択します。
 何らかの不都合がある場合にのみ指定してください。
 
+### Replication
+
+LDAP サーバのレプリケーションを設定します。
+この role では [N-Way Multi-Provider](https://www.openldap.org/doc/admin24/replication.html#N-Way%20Multi-Provider) 方式のレプリケーションに対応しています。
+
 ```yaml
 slapd_replication: false
 ```
 
-[N-Way Multi-Provider](https://www.openldap.org/doc/admin24/replication.html#N-Way%20Multi-Provider) 方式のレプリケーションを設定する場合に `true` を指定してください。
+レプリケーションを設定する場合は `slapd_replication` を `true` を指定してください。
 RHEL/CentOS 7 ではタスクに失敗するのでこの変数を `true` に設定してはいけません。
+
+```yaml
+slapd_replication_group: 'slapd'
+```
+
+レプリケーションを実施するホストの Ansible Inventory のグループ名を指定してください。
+この role は、ここで指定されたグループ内のホストでレプリケーションを構成します。
 
 ## Dependencies
 
