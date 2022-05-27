@@ -15,6 +15,8 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 provisioner:
   name: ansible
+  options:
+    diff: true
   inventory:
     group_vars:
       all:

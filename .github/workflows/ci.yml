@@ -27,7 +27,7 @@ jobs:
           python-version: '3.x'
 
       - name: Cache packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: python-3
         with:
@@ -47,6 +47,8 @@ jobs:
       matrix:
         distro:
           - centos7
+          - centos8
+          - ubuntu2204
           - ubuntu2004
           - ubuntu1804
           - debian11
@@ -65,18 +67,28 @@ jobs:
           python-version: '3.x'
 
       - name: Cache packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: python-3
         with:
-          path: ~/.cache/pip
-          key: ktooi-slapd-molecule
+          path: |
+            /home/runner/.cache/molecule/
+            /home/runner/.ansible/
+            ~/venv/
+          key: ${{ matrix.distro }}-molecule-${{ github.sha }}
+          restore-keys: ${{ matrix.distro }}-molecule-
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker
+        run: |
+          python3 -m venv ~/venv
+          source ~/venv/bin/activate
+          pip3 install -U pip
+          pip3 install ansible molecule[docker] docker
 
       - name: Run Molecule tests.
-        run: molecule test
+        run: |
+          source ~/venv/bin/activate
+          molecule test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
