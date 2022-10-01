@@ -142,10 +142,3 @@
   when: slapd_cmd_slapcat is not defined
   tags:
     - always
-
-- name: Define ldap_admin_dn
-  set_fact:
-    ldap_admin_dn: "{{ ldap_admin }},{{ ldap_admin_basedn }}"
-  when: ldap_admin_dn is not defined
-  tags:
-    - always
