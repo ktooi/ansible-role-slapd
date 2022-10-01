@@ -83,7 +83,7 @@
   set_fact:
     slapd_replication_sync_conf_list: >-
       {%- set r = [] -%}
-      {%- set stmt = 'rid={rid:03} provider={url} binddn="cn=config" bindmethod=simple retry="5 5 300" timeout=1' -%}
+      {%- set stmt = 'rid={rid:03} provider={url} binddn="cn=config" bindmethod=simple retry="5 5 300 5" timeout=1' -%}
       {%- for target in slapd_replication_target_list -%}
       {%-   set _ = r.append(stmt.format(rid=loop.index, url=target['url'])) -%}
       {%- endfor -%}
