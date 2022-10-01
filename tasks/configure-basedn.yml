@@ -49,7 +49,7 @@
           - '{{ ldap_cmd_ldapadd }}'
           - -x
           - -D
-          - '{{ ldap_admin_dn }}'
+          - '{{ ldap_admin_basedn }}'
           - -w
           - '{{ ldap_admin_passwd }}'
           - -f

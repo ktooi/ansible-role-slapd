@@ -129,6 +129,20 @@ slapd_replication_group: 'slapd'
 レプリケーションを実施するホストの Ansible Inventory のグループ名を指定してください。
 この role は、ここで指定されたグループ内のホストでレプリケーションを構成します。
 
+```yaml
+# slapd_replication_target_list:
+#   - id: 1
+#     url: "ldap://ldap01.example.com"
+#   - id: 2
+#     url: "ldap://ldap02.example.com"
+```
+
+レプリケーションを実施するホストをリストで指定します。
+通常の場合は `slapd_replication_group` にて指定した Ansible Inventory のグループから自動的に定義されるので、指定する必要はありません。
+接続先を Ansible に指定したホスト名ではなく、 IP で指定したい場合や、 Ansible 管轄外のホストとレプリケーションする場合などに指定が必要となるかもしれません。
+
+`id` キーは `rid` として、 `url` キーは `provider` として指定されます。
+
 ## Dependencies
 
 None.
