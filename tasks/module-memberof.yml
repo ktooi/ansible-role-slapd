@@ -7,16 +7,22 @@
     filter: "(&(objectClass=olcModuleList)(olcModuleLoad=memberof.la))"
   check_mode: false
   register: module_memberof
+  when: slapd_module_memberof_dn is not defined
 
-- name: "Ensure a module memberof.la was loaded"
-  become: true
-  ldap_entry:
-    dn: >-
+- name: Define slapd_module_memberof_dn
+  set_fact:
+    slapd_module_memberof_dn: >-
       {%- if module_memberof.results[0] is defined -%}
       {{ module_memberof.results[0].dn }}
       {%- else -%}
       cn=module,cn=config
       {%- endif -%}
+  when: slapd_module_memberof_dn is not defined
+
+- name: "Ensure a module memberof.la was loaded"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_module_memberof_dn }}"
     objectClass:
       - olcModuleList
       - top
@@ -34,16 +40,22 @@
     filter: "(&(olcOverlay=memberof)(objectClass=olcMemberOf))"
   check_mode: false
   register: overlay_memberof
+  when: slapd_overlay_memberof_dn is not defined
 
-- name: "Ensure the memberof overlay was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name: Define slapd_overlay_memberof_dn
+  set_fact:
+    slapd_overlay_memberof_dn: >-
       {%- if overlay_memberof.results[0] is defined -%}
       {{ overlay_memberof.results[0].dn }}
       {%- else -%}
       olcOverlay=memberof,{{ slapd_olcDatabase_type_dn }}
       {%- endif -%}
+  when: slapd_overlay_memberof_dn is not defined
+
+- name: "Ensure the memberof overlay was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_overlay_memberof_dn }}"
     objectClass:
       - olcOverlayConfig
       - olcMemberOf

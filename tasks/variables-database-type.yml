@@ -7,7 +7,11 @@
     filter: "(&(objectClass=olcDatabaseConfig)(olcDatabase={{ slapd_db_type }}))"
   check_mode: false
   register: tmp_slapd_olcDatabase_type
+  tags:
+    - always
 
 - name: "Define slapd_olcDatabase_type_dn"
   set_fact:
     slapd_olcDatabase_type_dn: '{{ tmp_slapd_olcDatabase_type.results[0].dn }}'
+  tags:
+    - always

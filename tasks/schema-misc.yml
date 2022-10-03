@@ -8,16 +8,22 @@
     filter: "(&(cn={*}misc)(objectClass=olcSchemaConfig))"
   check_mode: false
   register: schema_misc
+  when: slapd_schema_misc_dn is not defined
 
-- name: "Ensure the misc schema was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name: Define slapd_schema_misc_dn
+  set_fact:
+    slapd_schema_misc_dn: >-
       {%- if schema_misc.results[0] is defined -%}
       {{ schema_misc.results[0].dn }}
       {%- else -%}
       cn=misc,cn=schema,cn=config
       {%- endif -%}
+  when: slapd_schema_misc_dn is not defined
+
+- name: "Ensure the misc schema was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_schema_misc_dn }}"
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "misc"

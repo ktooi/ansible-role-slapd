@@ -13,6 +13,8 @@ platforms:
       - /tmp
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    groups:
+      - ${MOLECULE_DISTRO:-ubuntu2004}
 provisioner:
   name: ansible
   options:
@@ -21,5 +23,29 @@ provisioner:
     group_vars:
       all:
         slapd_cache_vaild_time: 0
+
+        slapd_install_schema_cosine: true
+        slapd_install_schema_nis: true
+        slapd_install_schema_misc: true
+        slapd_install_schema_ssh_lpk: true
+        slapd_install_schema_sudo: true
+
+        slapd_install_module_refint: true
+        slapd_install_module_memberof: true
+        slapd_install_module_syncprov: true
+
+        slapd_replication: true
+        slapd_replication_group: ${MOLECULE_DISTRO:-ubuntu2004}
+        slapd_replication_target_list:
+          - id: 1
+            url: 'ldap://ldap01.test.example.com'
+          - id: 2
+            url: 'ldap://ldap02.test.example.com'
+      centos7:
+        slapd_install_module_refint: false
+        slapd_install_module_memberof: false
+        slapd_install_module_syncprov: false
+        slapd_replication: false
+
 verifier:
   name: ansible

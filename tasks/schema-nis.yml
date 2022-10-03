@@ -8,16 +8,22 @@
     filter: "(&(cn={*}nis)(objectClass=olcSchemaConfig))"
   check_mode: false
   register: schema_nis
+  when: slapd_schema_nis_dn is not defined
 
-- name: "Ensure the nis schema was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name: Define slapd_schema_nis_dn
+  set_fact:
+    slapd_schema_nis_dn: >-
       {%- if schema_nis.results[0] is defined -%}
       {{ schema_nis.results[0].dn }}
       {%- else -%}
       cn=nis,cn=schema,cn=config
       {%- endif -%}
+  when: slapd_schema_nis_dn is not defined
+
+- name: "Ensure the nis schema was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_schema_nis_dn }}"
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "nis"

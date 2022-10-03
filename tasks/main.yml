@@ -1,5 +1,7 @@
 ---
 - include_tasks: "variables.yml"
+  tags:
+    - always
 - include_tasks: "{{ item }}"
   with_first_found:
     - files:
@@ -7,6 +9,8 @@
         - "setup-{{ ansible_os_family }}.yml"
 - include_tasks: "variables-hashed-passwd.yml"
 - include_tasks: "variables-database-type.yml"
+  tags:
+    - always
 - include_tasks: "configure.yml"
 - include_tasks: "configure-global-options.yml"
 - include_tasks: "configure-basedn.yml"
@@ -15,6 +19,10 @@
   when: slapd_install_module_memberof
 - include_tasks: "module-refint.yml"
   when: slapd_install_module_refint or slapd_install_module_memberof
+- include_tasks: "module-syncprov.yml"
+  when: slapd_install_module_syncprov or slapd_replication
+  tags:
+    - slapd_replication
 - include_tasks: "schema-cosine.yml"
   when: slapd_install_schema_cosine or slapd_install_schema_nis
 - include_tasks: "schema-nis.yml"
@@ -27,3 +35,8 @@
   when: slapd_install_schema_sudo
 - include_tasks: "schema-samba3.yml"
   when: slapd_install_schema_samba3
+
+- include_tasks: "replication.yml"
+  when: slapd_replication
+  tags:
+    - slapd_replication
