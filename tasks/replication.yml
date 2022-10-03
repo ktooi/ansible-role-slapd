@@ -265,7 +265,7 @@
 #   tags:
 #     - slapd_replication
 #     - molecule-idempotence-notest
-# 
+#
 # - name: Start up the provider and a consumer/s on the config database (2/2)
 #   become: true
 #   ldap_attrs:
@@ -324,6 +324,7 @@
     state: exact
   tags:
     - slapd_replication
+    - molecule-idempotence-notest  # TODO: https://github.com/ktooi/ansible-role-slapd/issues/7
 
 ## The following line was defined by module-syncprov.yml
 
