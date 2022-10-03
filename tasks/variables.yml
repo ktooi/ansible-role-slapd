@@ -100,11 +100,11 @@
   tags:
     - always
 
-# Set ldap_admin_basedn to ldap_admin + ldap_basedn then it does not defined.
-- name: Define ldap_admin_basedn
+# Set ldap_admin_dn to ldap_admin + ldap_basedn then it does not defined.
+- name: Define ldap_admin_dn
   set_fact:
-    ldap_admin_basedn: "{{ ldap_admin }},{{ ldap_basedn }}"
-  when: ldap_admin_basedn is not defined
+    ldap_admin_dn: "{{ ldap_admin }},{{ ldap_basedn }}"
+  when: ldap_admin_dn is not defined
   tags:
     - always
 
