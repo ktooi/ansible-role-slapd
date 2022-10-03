@@ -38,11 +38,19 @@ ldap_organization_name: Example Co., Ltd.
 # ldap_tls_crlcheck: <level>
 # ldap_tls_crlfile: <filename>
 
+slapd_protocol: 'ldap'
 # Set this to the slapd global configurations.
 slapd_loglevel: stats
 # slapd_idletimeout: 86400
 # slapd_sizelimit: 500
 # slapd_referral: on
+
+# Set this to the replication of the slapd
+slapd_replication: false
+slapd_replication_group: 'slapd'
+slapd_replication_uri_list:
+  - "ldap://ldap1.example.com"
+  - "ldap://ldap2.example.com"
 
 # Users credential.
 slapd_passwd_scheme: '{SSHA}'
@@ -68,3 +76,4 @@ slapd_install_schema_sudo: false
 # Select whether or not to install the modules.
 slapd_install_module_refint: false
 slapd_install_module_memberof: false
+slapd_install_module_syncprov: false

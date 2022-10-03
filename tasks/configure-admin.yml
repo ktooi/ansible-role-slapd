@@ -6,11 +6,11 @@
     attributes:
       olcAccess:
         - 'to *
-          by dn="{{ ldap_admin_dn }}" manage
+          by dn="{{ ldap_admin_basedn }}" manage
           by self read
           by * read'
         - 'to attrs=userPassword
-          by dn="{{ ldap_admin_dn }}" write
+          by dn="{{ ldap_admin_basedn }}" write
           by anonymous auth
           by self write
           by * none'
@@ -26,7 +26,7 @@
         - 'to dn.base=""
           by * read'
       olcSuffix: '{{ ldap_basedn }}'
-      olcRootDN: '{{ ldap_admin_dn }}'
+      olcRootDN: '{{ ldap_admin_basedn }}'
       olcRootPW: '{{ ldap_admin_hashed_passwd }}'
     state: exact
   # WORKAROUND: Skip this task due to the following error occurred at RedHat 7

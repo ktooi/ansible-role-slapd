@@ -19,7 +19,7 @@
       template:
         src: modify-domain.ldif.j2
         mode: 0400
-        dest: "{{ temp_modify_domain.path }}"
+        dest: "{{ temp_modify_domain.path if temp_modify_domain.path is defined else '/tmp/check_mode' }}"
     - name: "Replace basically configurations (2/2)"
       become: true
       command:
@@ -30,10 +30,10 @@
           - -H
           - ldapi:///
           - -f
-          - '{{ temp_modify_domain.path }}'
+          - '{{ temp_modify_domain.path if temp_modify_domain.path is defined else "/tmp/check_mode" }}'
     - name: "Delete temporary file to replace basically configurations"
       file:
-        path: "{{ temp_modify_domain.path }}"
+        path: "{{ temp_modify_domain.path if temp_modify_domain.path is defined else '/tmp/check_mode' }}"
         state: absent
     - name: "Create temporary file to add basically baseDN configurations"
       tempfile:
@@ -42,21 +42,21 @@
     - name: "Add basically baseDN configurations (1/2)"
       template:
         src: add-domain.ldif.j2
-        dest: "{{ temp_add_basedn.path }}"
+        dest: "{{ temp_add_basedn.path if temp_add_basedn.path is defined else '/tmp/check_mode' }}"
     - name: "Add basically baseDN configurations (2/2)"
       command:
         argv:
           - '{{ ldap_cmd_ldapadd }}'
           - -x
           - -D
-          - '{{ ldap_admin_dn }}'
+          - '{{ ldap_admin_basedn }}'
           - -w
           - '{{ ldap_admin_passwd }}'
           - -f
-          - '{{ temp_add_basedn.path }}'
+          - '{{ temp_add_basedn.path if temp_add_basedn.path is defined else "/tmp/check_mode" }}'
     - name: "Delete temporary file to add basically baseDN configurations"
       file:
-        path: "{{ temp_add_basedn.path }}"
+        path: "{{ temp_add_basedn.path if temp_add_basedn.path is defined else '/tmp/check_mode' }}"
         state: absent
   when: not basedn.stdout_lines
 

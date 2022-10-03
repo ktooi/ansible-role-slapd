@@ -8,16 +8,22 @@
     filter: "(&(cn={*}sudo)(objectClass=olcSchemaConfig))"
   check_mode: false
   register: schema_sudo
+  when: slapd_schema_sudo_dn is not defined
 
-- name: "Ensure the sudo schema was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name: Define slapd_schema_sudo_dn
+  set_fact:
+    slapd_schema_sudo_dn: >-
       {%- if schema_sudo.results[0] is defined -%}
       {{ schema_sudo.results[0].dn }}
       {%- else -%}
       cn=sudo,cn=schema,cn=config
       {%- endif -%}
+  when: slapd_schema_sudo_dn is not defined
+
+- name: "Ensure the sudo schema was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_schema_sudo_dn }}"
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "sudo"

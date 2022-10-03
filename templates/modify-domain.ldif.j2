@@ -4,10 +4,10 @@ replace: olcSuffix
 olcSuffix: {{ ldap_basedn }}
 -
 replace: olcRootDN
-olcRootDN: {{ ldap_admin_dn }}
+olcRootDN: {{ ldap_admin_basedn }}
 -
 replace: olcRootPW
 olcRootPW: {{ ldap_admin_hashed_passwd }}
 -
 replace: olcAccess
-olcAccess: {0}to * by dn="{{ ldap_admin_dn }}" manage by * read
+olcAccess: {0}to * by dn="{{ ldap_admin_basedn }}" manage by * read

@@ -4,6 +4,19 @@
 
 RHEL/CentOS, Debian/Ubuntu サーバに slapd をインストールし、基本的な設定を行います。
 
+この role では次のことを行います。
+
+* LDAP サーバのインストール
+* LDAP サーバの基本設定
+* BaseDN の設定
+* 管理者権限の設定
+* スキーマのインポート
+* モジュールのインポート
+
+この role では次のことを行いません。
+
+* アカウントやグループなどのエントリ情報の登録
+
 ## Requirements
 
 この role には特別な要件はありません。
@@ -55,9 +68,23 @@ slapd_install_schema_sudo: false
 一度インストールしたスキーマは、 `false` に設定してもアンインストールされません。
 
 ```yaml
+slapd_schema_cosine_dn: null
+slapd_schema_misc_dn: null
+slapd_schema_nis_dn: null
+slapd_schema_lpk_dn: null
+slapd_schema_sudo_dn: null
+```
+
+インストールするスキーマの DN を指定します。
+
+デフォルトでは自動的に適切な DN を選択します。
+何らかの不都合がある場合にのみ指定してください。
+
+```yaml
 # Select whether or not to install the modules.
 slapd_install_module_refint: false
 slapd_install_module_memberof: false
+slapd_install_module_syncprov: false
 ```
 
 インストールするモジュールを指定します。
@@ -67,6 +94,54 @@ RHEL/CentOS 7 ではタスクに失敗するのでこれらの変数を `true` �
 `false` に設定するとモジュールはインストールされません。
 
 一度インストールしたモジュールは、 `false` に設定してもアンインストールされません。
+
+```yaml
+slapd_module_memberof_dn: null
+slapd_overlay_memberof_dn: null
+slapd_module_refint_dn: null
+slapd_overlay_refint_dn: null
+slapd_module_syncprov_dn: null
+slapd_overlay_syncprov_config_dn: null
+slapd_overlay_syncprov_dn: null
+```
+
+インストールするモジュールの DN を指定します。
+
+デフォルトでは自動的に適切な DN を選択します。
+何らかの不都合がある場合にのみ指定してください。
+
+### Replication
+
+LDAP サーバのレプリケーションを設定します。
+この role では [N-Way Multi-Provider](https://www.openldap.org/doc/admin24/replication.html#N-Way%20Multi-Provider) 方式のレプリケーションに対応しています。
+
+```yaml
+slapd_replication: false
+```
+
+レプリケーションを設定する場合は `slapd_replication` を `true` を指定してください。
+RHEL/CentOS 7 ではタスクに失敗するのでこの変数を `true` に設定してはいけません。
+
+```yaml
+slapd_replication_group: 'slapd'
+```
+
+レプリケーションを実施するホストの Ansible Inventory のグループ名を指定してください。
+この role は、ここで指定されたグループ内のホストでレプリケーションを構成します。
+
+```yaml
+# slapd_replication_target_list:
+#   - id: 1
+#     url: "ldap://ldap01.example.com"
+#   - id: 2
+#     url: "ldap://ldap02.example.com"
+```
+
+レプリケーションを実施するホストをリストで指定します。
+通常の場合は `slapd_replication_group` にて指定した Ansible Inventory のグループから自動的に定義されるので、指定する必要はありません。
+接続先を Ansible に指定したホスト名ではなく、 IP で指定したい場合や、 Ansible 管轄外のホストとレプリケーションする場合などに指定が必要となるかもしれません。
+
+`id` キーは `rid` として、 `url` キーは `provider` として指定されます。
 
 ## Dependencies
 
