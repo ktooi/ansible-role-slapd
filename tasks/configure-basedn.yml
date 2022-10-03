@@ -60,11 +60,20 @@
         state: absent
   when: not basedn.stdout_lines
 
+- name: Configure LDAP root to password
+  become: true
+  ldap_attrs:
+    dn: "olcDatabase={0}config,cn=config"
+    attributes:
+      olcRootPW: '{{ ldap_root_hashed_passwd }}'
+    state: exact
+  tags:
+    - molecule-idempotence-notest
+
 - name: Ensure baseDN
   ldap_attrs:
     dn: '{{ ldap_basedn }}'
-    bind_dn: "{{ ldap_admin_dn }}"
-    bind_pw: "{{ ldap_admin_passwd }}"
+    bind_pw: "{{ ldap_root_passwd }}"
     attributes:
       dc: '{{ ldap_base_head }}'
       o: '{{ ldap_organization_name }}'

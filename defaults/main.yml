@@ -1,9 +1,8 @@
 ---
 ldap_basedn: dc=example,dc=com
-ldap_base_head: example
+# ldap_base_head: example
 ldap_organization_name: Example Co., Ltd.
-# ldap_organization_name: example.com
-ldap_domain: example.com
+# ldap_domain: example.com
 # ldap_uri_list:
 #   - ldap://ldap.example.com
 #   - ldap://ldap-master.example.com:666
@@ -28,7 +27,7 @@ ldap_domain: example.com
 # ldap_gssapi_encrypt: on
 # ldap_gssapi_allow_remote_principal: on
 
-ldap_tls_cacert: "/etc/ssl/certs/ca-certificates.crt"
+# ldap_tls_cacert: "/etc/ssl/certs/ca-certificates.crt"
 # ldap_tls_cacertdir: <path>
 # ldap_tls_cert: <filename>
 # ldap_tls_key: <filename>
@@ -39,23 +38,34 @@ ldap_tls_cacert: "/etc/ssl/certs/ca-certificates.crt"
 # ldap_tls_crlcheck: <level>
 # ldap_tls_crlfile: <filename>
 
+# Set this to the slapd global configurations.
 slapd_loglevel: stats
 # slapd_idletimeout: 86400
 # slapd_sizelimit: 500
 # slapd_referral: on
+
+# Users credential.
 slapd_passwd_scheme: '{SSHA}'
 ldap_root_passwd: "root_passwd"
 ldap_admin: "cn=admin"
+# Set this if different from the ldap_basedn.
 # ldap_admin_base: "dc=example,dc=com"
 ldap_admin_passwd: "admin_passwd"
+# If you want to reduce the number of tasks
+# that are "Changed", specify the hash
+# that you generated beforehand using the following slappasswd command.
 # $ slappasswd -h '{SSHA}'
-ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
-ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
+# ldap_root_hashed_passwd: '{SSHA}WA/exo2HKC1H4EsOUxGbWU6mW0eT1A1K'
+# ldap_admin_hashed_passwd: '{SSHA}a5gsMFahundHCuqNYeVrhX3QO6ZXCI+/'
+
+# Select whether or not to install the schemas.
 slapd_install_schema_cosine: true
 slapd_install_schema_nis: true
-slapd_install_schema_misc: true
-slapd_install_schema_ssh_lpk: true
-slapd_install_schema_sudo: true
-slapd_install_schema_samba3: true
-slapd_install_module_refint: true
-slapd_install_module_memberof: true
+slapd_install_schema_misc: false
+slapd_install_schema_ssh_lpk: false
+slapd_install_schema_sudo: false
+slapd_install_schema_samba3: false
+
+# Select whether or not to install the modules.
+slapd_install_module_refint: false
+slapd_install_module_memberof: false

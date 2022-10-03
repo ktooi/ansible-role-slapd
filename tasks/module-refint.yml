@@ -29,7 +29,7 @@
 - name: "Check the refint overlay was already exists"
   become: true
   community.general.ldap_search:
-    dn: "olcDatabase={1}{{ slapd_db_type }},cn=config"
+    dn: '{{ slapd_olcDatabase_type_dn }}'
     schema: true
     scope: "onelevel"
     filter: "(&(olcOverlay=refint)(objectClass=olcRefintConfig))"
@@ -43,7 +43,7 @@
       {%- if overlay_refint.results[0] is defined -%}
       {{ overlay_refint.results[0].dn }}
       {%- else -%}
-      olcOverlay=refint,olcDatabase={1}{{ slapd_db_type }},cn=config
+      olcOverlay=refint,{{ slapd_olcDatabase_type_dn }}
       {%- endif -%}
     objectClass:
       - olcOverlayConfig

@@ -1,4 +1,4 @@
-dn: olcDatabase={1}{{ slapd_db_type }},cn=config
+dn: {{ slapd_olcDatabase_type_dn }}
 changetype: modify
 replace: olcSuffix
 olcSuffix: {{ ldap_basedn }}
@@ -10,4 +10,4 @@ replace: olcRootPW
 olcRootPW: {{ ldap_admin_hashed_passwd }}
 -
 replace: olcAccess
-olcAccess: {0}to * by dn="{{ ldap_admin_dn }}" write by * read
+olcAccess: {0}to * by dn="{{ ldap_admin_dn }}" manage by * read

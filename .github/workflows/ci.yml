@@ -1,17 +1,38 @@
 ---
 name: CI
+'on':
+  pull_request:
+  push:
+    branches:
+      - "*"
 
-on: [push]
+defaults:
+  run:
+    working-directory: 'ktooi.slapd'
 
 jobs:
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+        with:
+          path: 'ktooi.slapd'
+
       - name: Set up Python 3.
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+
+      - name: Cache packages
+        uses: actions/cache@v3
+        env:
+          cache-name: python-3
+        with:
+          path: ~/.cache/pip
+          key: ktooi-slapd-yamllint
 
       - name: Install test dependencies.
         run: pip3 install yamllint
@@ -19,3 +40,56 @@ jobs:
       - name: Lint code.
         run: |
           yamllint .
+  molecule:
+    name: Molecule
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - centos7
+          - ubuntu2204
+          - ubuntu2004
+          - ubuntu1804
+          - debian11
+          - debian10
+          - debian9
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+        with:
+          path: 'ktooi.slapd'
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Cache packages
+        uses: actions/cache@v3
+        env:
+          cache-name: python-3
+        with:
+          path: |
+            /home/runner/.cache/molecule/
+            /home/runner/.ansible/
+            ~/venv/
+          key: ${{ matrix.distro }}-molecule-${{ github.sha }}
+          restore-keys: ${{ matrix.distro }}-molecule-
+
+      - name: Install test dependencies.
+        run: |
+          python3 -m venv ~/venv
+          source ~/venv/bin/activate
+          pip3 install -U pip
+          pip3 install ansible molecule[docker] docker
+
+      - name: Run Molecule tests.
+        run: |
+          source ~/venv/bin/activate
+          molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
