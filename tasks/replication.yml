@@ -120,7 +120,7 @@
                      'interval=00:00:00:10 retry="5 5 300 5" timeout=1' -%}
       {%- for target in slapd_replication_target_list -%}
       {%-   set rid = slapd_replication_sync_conf_list | length + loop.index -%}
-      {%-   set _ = r.append(stmt.format(rid=rid, url=target['url'], binddn=ldap_admin_basedn,
+      {%-   set _ = r.append(stmt.format(rid=rid, url=target['url'], binddn=ldap_admin_dn,
                                          passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
       {%- endfor -%}
       {{ r | list }}
@@ -307,7 +307,7 @@
     dn: '{{ slapd_olcDatabase_type_dn }}'
     attributes:
       olcLimits: >-
-        dn.exact="{{ ldap_admin_basedn }}" time.soft=unlimited time.hard=unlimited
+        dn.exact="{{ ldap_admin_dn }}" time.soft=unlimited time.hard=unlimited
         size.soft=unlimited size.hard=unlimited
       olcSyncrepl: '{{ slapd_replication_sync_db_list }}'
     state: exact
