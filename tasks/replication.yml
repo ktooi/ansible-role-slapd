@@ -84,10 +84,11 @@
     slapd_replication_sync_conf_list: >-
       {%- set r = [] -%}
       {%- set stmt = 'rid={rid:03} provider={url} binddn="cn=config" bindmethod=simple '
-                     'credentials=secret searchbase="cn=config" type=refreshAndPersist '
+                     'credentials={passwd} searchbase="cn=config" type=refreshAndPersist '
                      'retry="5 5 300 5" timeout=1' -%}
       {%- for target in slapd_replication_target_list -%}
-      {%-   set _ = r.append(stmt.format(rid=loop.index, url=target['url'])) -%}
+      {%-   set _ = r.append(stmt.format(rid=loop.index, url=target['url'],
+                                         passwd='secret')) -%}  # TODO: 決め打ちになっているのを修正する。
       {%- endfor -%}
       {{ r | list }}
   when: slapd_replication_sync_conf_list is not defined
@@ -114,8 +115,9 @@
   set_fact:
     slapd_replication_sync_db_list: >-
       {%- set r = [] -%}
-      {%- set stmt = 'rid={rid:03} provider={url} binddn="{binddn}" bindmethod=simple credentials={passwd} '
-                     'searchbase="{basedn}" type=refreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1' -%}
+      {%- set stmt = 'rid={rid:03} provider={url} binddn="{binddn}" bindmethod=simple '
+                     'credentials={passwd} searchbase="{basedn}" type=refreshOnly '
+                     'interval=00:00:00:10 retry="5 5 300 5" timeout=1' -%}
       {%- for target in slapd_replication_target_list -%}
       {%-   set rid = slapd_replication_sync_conf_list | length + loop.index -%}
       {%-   set _ = r.append(stmt.format(rid=rid, url=target['url'], binddn=ldap_admin_basedn,
@@ -162,13 +164,31 @@
 #      olcDatabase: {0}config
 #      olcRootPW: secret
 
+- name: Ensure slapd of global config options included olcServerID
+  become: true
+  ldap_entry:
+    dn: "cn=config"
+    objectClass:
+      - olcGlobal
+    attributes:
+      cn: config
+      olcServerID: '{{ slapd_replication_server_id }}'
+  tags:
+    - slapd_replication
+
+# TODO: config database のレプリケーションの設定に失敗するので task を無効化しておく。
+# See also: https://github.com/ktooi/ansible-role-slapd/issues/6
+#
 # - name: Ensure slapd of global config options included olcServerID
 #   become: true
-#   ldap_attrs:
-#     dn: "cn=config"
+#   ldap_entry:
+#     dn: "olcDatabase={0}config,cn=config"
+#     objectClass:
+#       - olcDatabaseConfig
 #     attributes:
-#       olcServerID: '{{ slapd_replication_server_id }}'
-#     state: exact
+#       olcDatabase: '{0}config'
+#       # 元の文字列は 'secret'. 最終的には slappasswd コマンドで生成した値を利用する。
+#       olcRootPW: '{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid'
 #   tags:
 #     - slapd_replication
 
@@ -231,17 +251,21 @@
 #      olcMirrorMode: TRUE
 # Now start up the provider and a consumer/s, also add the above LDIF to the first consumer, second consumer etc.
 # It will then replicate cn=config. You now have N-Way Multi-Provider on the config database.
-- name: Start up the provider and a consumer/s on the config database (1/2)
-  become: true
-  ldap_attrs:
-    dn: 'olcDatabase={0}config,cn=config'
-    attributes:
-      olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
-    state: exact
-  tags:
-    - slapd_replication
-    - molecule-idempotence-notest
 
+# TODO: config database のレプリケーションの設定に失敗するので task を無効化しておく。
+# See also: https://github.com/ktooi/ansible-role-slapd/issues/6
+#
+# - name: Start up the provider and a consumer/s on the config database (1/2)
+#   become: true
+#   ldap_attrs:
+#     dn: 'olcDatabase={0}config,cn=config'
+#     attributes:
+#       olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
+#     state: exact
+#   tags:
+#     - slapd_replication
+#     - molecule-idempotence-notest
+# 
 # - name: Start up the provider and a consumer/s on the config database (2/2)
 #   become: true
 #   ldap_attrs:
@@ -251,7 +275,7 @@
 #     state: exact
 #   tags:
 #     - slapd_replication
-#
+
 # We still have to replicate the actual data, not just the config, so add to the provider
 # (all active and configured consumers/providers will pull down this config, as they are all syncing).
 # Also, replace all ${} variables with whatever is applicable to your setup:
