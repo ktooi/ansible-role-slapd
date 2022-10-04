@@ -55,6 +55,7 @@ slapd の管理権限を設定します。
 # Select whether or not to install the schemas.
 slapd_install_schema_cosine: true
 slapd_install_schema_nis: true
+slapd_install_schema_samba3: true
 slapd_install_schema_misc: false
 slapd_install_schema_ssh_lpk: false
 slapd_install_schema_sudo: false
@@ -71,6 +72,7 @@ slapd_install_schema_sudo: false
 slapd_schema_cosine_dn: null
 slapd_schema_misc_dn: null
 slapd_schema_nis_dn: null
+slapd_schema_samba3_dn: null
 slapd_schema_lpk_dn: null
 slapd_schema_sudo_dn: null
 ```

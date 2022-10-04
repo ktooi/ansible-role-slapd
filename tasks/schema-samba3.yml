@@ -10,16 +10,22 @@
     filter: "(&(cn={*}samba3)(objectClass=olcSchemaConfig))"
   check_mode: false
   register: schema_samba3
+  when: slapd_schema_samba3_dn is not defined
 
-- name: "Ensure the samba3 schema was registered"
-  become: true
-  ldap_entry:
-    dn: >-
+- name: Define slapd_schema_samba3_dn
+  set_fact:
+    slapd_schema_samba3_dn: >-
       {%- if schema_samba3.results[0] is defined -%}
       {{ schema_samba3.results[0].dn }}
       {%- else -%}
       cn=samba3,cn=schema,cn=config
       {%- endif -%}
+  when: slapd_schema_samba3_dn is not defined
+
+- name: "Ensure the samba3 schema was registered"
+  become: true
+  ldap_entry:
+    dn: "{{ slapd_schema_samba3_dn }}"
     objectClass: "olcSchemaConfig"
     attributes:
       cn: "samba3"
