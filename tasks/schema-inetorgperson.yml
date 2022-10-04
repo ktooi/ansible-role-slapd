@@ -12,9 +12,9 @@
   register: schema_inetorgperson
   when: slapd_schema_inetorgperson_dn is not defined
 
-- name: Define slapd_schema_lpk_dn
+- name: Define slapd_schema_inetorgperson_dn
   set_fact:
-    slapd_schema_lpk_dn: >-
+    slapd_schema_inetorgperson_dn: >-
       {%- if schema_inetorgperson.results[0] is defined -%}
       {{ schema_inetorgperson.results[0].dn }}
       {%- else -%}
