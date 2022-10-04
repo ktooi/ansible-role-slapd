@@ -69,6 +69,7 @@ ldap_admin_passwd: "admin_passwd"
 # Select whether or not to install the schemas.
 slapd_install_schema_cosine: true
 slapd_install_schema_nis: true
+slapd_install_schema_inetorgperson: true
 slapd_install_schema_misc: false
 slapd_install_schema_ssh_lpk: false
 slapd_install_schema_sudo: false
