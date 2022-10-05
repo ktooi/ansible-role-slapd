@@ -46,6 +46,15 @@
   tags:
     - always
 
+- name: Define ldap_server_db_config_file
+  set_fact:
+    ldap_server_db_config_file: "{{ __ldap_server_db_config_file }}"
+  when:
+    - ldap_server_db_config_file is not defined
+    - __ldap_server_db_config_file is defined
+  tags:
+    - always
+
 - name: Define ldap_python_modules
   set_fact:
     ldap_python_modules: "{{ __ldap_python_modules | list }}"

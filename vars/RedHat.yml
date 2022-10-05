@@ -3,6 +3,7 @@ __ldap_server_packages:
   - openldap-servers
   - openldap-clients
 __ldap_server_repo: plus
+__ldap_server_db_config_file: "/var/lib/ldap/DB_CONFIG"
 __ldap_python_modules:
   - python3-ldap
 __ldap_python_modules_pip:
