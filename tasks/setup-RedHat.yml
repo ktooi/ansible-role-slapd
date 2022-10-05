@@ -1,24 +1,9 @@
 ---
-- name: Ensure 389-ds-base was installed
-  become: true
-  dnf:
-    name: 389-ds-base
-    state: present
-
-- name: Enable DNF module
-  become: true
-  command:
-    argv:
-      - dnf
-      - -y
-      - module
-      - enable
-      - 389-ds
-
 - name: Install LDAP packages.
   become: true
   dnf:
     name: "{{ ldap_server_packages }}"
+    enablerepo: "{{ ldap_server_repo | default(omit) }}"
 
 - name: Install python packages for LDAP.
   become: true

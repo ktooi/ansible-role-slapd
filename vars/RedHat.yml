@@ -1,8 +1,8 @@
 ---
 __ldap_server_packages:
-  - '389-ds-base'
-  - openldap
+  - openldap-servers
   - openldap-clients
+__ldap_server_repo: plus
 __ldap_python_modules:
   - python3-ldap
 __ldap_python_modules_pip:
