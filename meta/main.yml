@@ -5,7 +5,7 @@ galaxy_info:
   role_name: slapd
   author: ktooi
   description: >-
-    Install and configure slapd for RHEL/CentOS and Debian/Ubuntu. 
+    Install and configure slapd for RHEL/CentOS and Debian/Ubuntu.
     Optionally, major modules and schemas can be imported and replication can be configured.
   license: "license (MIT)"
   min_ansible_version: 2.0
