@@ -42,6 +42,17 @@ provisioner:
             url: 'ldap://ldap01.test.example.com'
           - id: 2
             url: 'ldap://ldap02.test.example.com'
+      # https://github.com/ktooi/ansible-role-slapd/issues/12
+      rockylinux9:
+        slapd_install_module_refint: false
+        slapd_install_module_memberof: false
+        slapd_install_module_syncprov: false
+        slapd_replication: false
+      rockylinux8:
+        slapd_install_module_refint: false
+        slapd_install_module_memberof: false
+        slapd_install_module_syncprov: false
+        slapd_replication: false
       centos7:
         slapd_install_module_refint: false
         slapd_install_module_memberof: false
