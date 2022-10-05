@@ -1,4 +1,10 @@
 ---
+- name: Ensure 389-ds-base was installed
+  become: true
+  dnf:
+    name: 389-ds-base
+    state: present
+
 - name: Enable DNF module
   become: true
   command:
