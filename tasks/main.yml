@@ -24,15 +24,19 @@
   tags:
     - slapd_replication
 - include_tasks: "schema-cosine.yml"
-  when: slapd_install_schema_cosine or slapd_install_schema_nis
+  when: slapd_install_schema_cosine or slapd_install_schema_nis or slapd_install_schema_samba3
 - include_tasks: "schema-nis.yml"
-  when: slapd_install_schema_nis
+  when: slapd_install_schema_nis or slapd_install_schema_samba3
 - include_tasks: "schema-misc.yml"
   when: slapd_install_schema_misc
+- include_tasks: "schema-inetorgperson.yml"
+  when: slapd_install_schema_inetorgperson or slapd_install_schema_samba3
 - include_tasks: "schema-ssh-lpk.yml"
   when: slapd_install_schema_ssh_lpk
 - include_tasks: "schema-sudo.yml"
   when: slapd_install_schema_sudo
+- include_tasks: "schema-samba3.yml"
+  when: slapd_install_schema_samba3
 
 - include_tasks: "replication.yml"
   when: slapd_replication

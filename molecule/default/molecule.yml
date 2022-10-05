@@ -29,6 +29,7 @@ provisioner:
         slapd_install_schema_misc: true
         slapd_install_schema_ssh_lpk: true
         slapd_install_schema_sudo: true
+        slapd_install_schema_samba3: true
 
         slapd_install_module_refint: true
         slapd_install_module_memberof: true
