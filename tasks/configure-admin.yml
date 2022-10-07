@@ -5,32 +5,26 @@
     dn: '{{ slapd_olcDatabase_type_dn }}'
     attributes:
       olcAccess:
-        - >-
-          to *
+        - 'to *
           by dn="{{ ldap_admin_dn }}" manage
           by self read
-          by * read
-        - >-
-          to attrs=userPassword
+          by * read'
+        - 'to attrs=userPassword
           by dn="{{ ldap_admin_dn }}" write
           by anonymous auth
           by self write
-          by * none
-        - >-
-          to attrs=shadowLastChange
+          by * none'
+        - 'to attrs=shadowLastChange
           by self write
-          by * read
-        - >-
-          to dn.children="ou=users,{{ ldap_basedn }}"
+          by * read'
+        - 'to dn.children="ou=users,{{ ldap_basedn }}"
           by self read
-          by anonymous read
-        - >-
-          to dn.children="ou=groups,{{ ldap_basedn }}"
+          by anonymous read'
+        - 'to dn.children="ou=groups,{{ ldap_basedn }}"
           by self read
-          by anonymous read
-        - >-
-          to dn.base=""
-          by * read
+          by anonymous read'
+        - 'to dn.base=""
+          by * read'
       olcSuffix: '{{ ldap_basedn }}'
       olcRootDN: '{{ ldap_admin_dn }}'
       olcRootPW: '{{ ldap_admin_hashed_passwd }}'
@@ -38,6 +32,6 @@
   # WORKAROUND: Skip this task due to the following error occurred at RedHat 7/8/9
   # OTHER: {'info': '<olcModuleLoad> handler exited with 1', 'desc': 'Other (e.g., implementation specific) error'}
   # See also: https://github.com/ktooi/ansible-role-slapd/issues/11
-  #when: not ansible_os_family == "RedHat"
+  when: not ansible_os_family == "RedHat"
   tags:
     - molecule-idempotence-notest
