@@ -1,0 +1,31 @@
+---
+- name: Install LDAP packages.
+  become: true
+  dnf:
+    name: "{{ ldap_server_packages }}"
+    enablerepo: "{{ ldap_server_repo | default(omit) }}"
+
+- name: Install python packages for LDAP.
+  become: true
+  dnf:
+    name: "{{ ldap_python_modules }}"
+  when: not slapd_install_python_module_via_pip
+
+- name: Install python packages for LDAP using pip.
+  become: true
+  pip:
+    name: "{{ ldap_python_modules_pip }}"
+  when: slapd_install_python_module_via_pip
+
+- name: Copy DB_CONFIG
+  become: true
+  template:
+    src: DB_CONFIG.j2
+    dest: "{{ ldap_server_db_config_file }}"
+
+- name: Start the slapd daemon.
+  become: true
+  systemd:
+    name: "{{ slapd_daemon }}"
+    enabled: true
+    state: started

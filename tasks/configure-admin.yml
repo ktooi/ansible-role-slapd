@@ -29,10 +29,9 @@
       olcRootDN: '{{ ldap_admin_dn }}'
       olcRootPW: '{{ ldap_admin_hashed_passwd }}'
     state: exact
-  # WORKAROUND: Skip this task due to the following error occurred at RedHat 7
+  # WORKAROUND: Skip this task due to the following error occurred at RedHat 7/8/9
   # OTHER: {'info': '<olcModuleLoad> handler exited with 1', 'desc': 'Other (e.g., implementation specific) error'}
-  when: >-
-    not ( ansible_os_family == "RedHat"
-    and ansible_distribution_major_version == "7" )
+  # See also: https://github.com/ktooi/ansible-role-slapd/issues/11
+  when: not ansible_os_family == "RedHat"
   tags:
     - molecule-idempotence-notest

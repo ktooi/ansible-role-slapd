@@ -47,6 +47,8 @@ jobs:
       fail-fast: false
       matrix:
         distro:
+          - rockylinux9
+          - rockylinux8
           - centos7
           - ubuntu2204
           - ubuntu2004
