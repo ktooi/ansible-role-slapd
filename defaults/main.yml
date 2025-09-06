@@ -52,6 +52,11 @@ slapd_replication_uri_list:
   - "ldap://ldap1.example.com"
   - "ldap://ldap2.example.com"
 
+# Config database root password for replication
+# Default password is 'secret' - change this in production!
+# You can generate a hashed password using: slappasswd -h '{SSHA}'
+slapd_config_rootpw: '{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid'
+
 # Users credential.
 slapd_passwd_scheme: '{SSHA}'
 ldap_root_passwd: "root_passwd"

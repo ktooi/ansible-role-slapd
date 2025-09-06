@@ -176,21 +176,15 @@
   tags:
     - slapd_replication
 
-# TODO: config database のレプリケーションの設定に失敗するので task を無効化しておく。
-# See also: https://github.com/ktooi/ansible-role-slapd/issues/6
-#
-# - name: Ensure slapd of global config options included olcServerID
-#   become: true
-#   ldap_entry:
-#     dn: "olcDatabase={0}config,cn=config"
-#     objectClass:
-#       - olcDatabaseConfig
-#     attributes:
-#       olcDatabase: '{0}config'
-#       # 元の文字列は 'secret'. 最終的には slappasswd コマンドで生成した値を利用する。
-#       olcRootPW: '{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid'
-#   tags:
-#     - slapd_replication
+- name: Ensure slapd config database has olcRootPW set
+  become: true
+  ldap_attrs:
+    dn: "olcDatabase={0}config,cn=config"
+    attributes:
+      olcRootPW: '{{ slapd_config_rootpw | default("{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid") }}'
+    state: present
+  tags:
+    - slapd_replication
 
 
 ## The following line was defined by module-syncprov.yml
@@ -252,29 +246,48 @@
 # Now start up the provider and a consumer/s, also add the above LDIF to the first consumer, second consumer etc.
 # It will then replicate cn=config. You now have N-Way Multi-Provider on the config database.
 
-# TODO: config database のレプリケーションの設定に失敗するので task を無効化しておく。
-# See also: https://github.com/ktooi/ansible-role-slapd/issues/6
-#
-# - name: Start up the provider and a consumer/s on the config database (1/2)
-#   become: true
-#   ldap_attrs:
-#     dn: 'olcDatabase={0}config,cn=config'
-#     attributes:
-#       olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
-#     state: exact
-#   tags:
-#     - slapd_replication
-#     - molecule-idempotence-notest
-#
-# - name: Start up the provider and a consumer/s on the config database (2/2)
-#   become: true
-#   ldap_attrs:
-#     dn: 'olcDatabase={0}config,cn=config'
-#     attributes:
-#       olcMirrorMode: 'TRUE'
-#     state: exact
-#   tags:
-#     - slapd_replication
+- name: Configure config database syncrepl (step 1/3) - Add olcSyncrepl
+  become: true
+  ldap_attrs:
+    dn: 'olcDatabase={0}config,cn=config'
+    attributes:
+      olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
+    state: present
+  when: slapd_replication_server_id | int == 1
+  tags:
+    - slapd_replication
+    - molecule-idempotence-notest
+
+- name: Configure config database syncrepl (step 2/3) - Enable MirrorMode on first server
+  become: true
+  ldap_attrs:
+    dn: 'olcDatabase={0}config,cn=config'
+    attributes:
+      olcMirrorMode: 'TRUE'
+    state: present
+  when: slapd_replication_server_id | int == 1
+  tags:
+    - slapd_replication
+
+- name: Wait for first server to be ready
+  pause:
+    seconds: 5
+  when: slapd_replication_server_id | int != 1
+  tags:
+    - slapd_replication
+
+- name: Configure config database syncrepl (step 3/3) - Add olcSyncrepl to other servers
+  become: true
+  ldap_attrs:
+    dn: 'olcDatabase={0}config,cn=config'
+    attributes:
+      olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
+      olcMirrorMode: 'TRUE'
+    state: present
+  when: slapd_replication_server_id | int != 1
+  tags:
+    - slapd_replication
+    - molecule-idempotence-notest
 
 # We still have to replicate the actual data, not just the config, so add to the provider
 # (all active and configured consumers/providers will pull down this config, as they are all syncing).

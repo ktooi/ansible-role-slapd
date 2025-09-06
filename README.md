@@ -145,6 +145,17 @@ slapd_replication_group: 'slapd'
 
 `id` キーは `rid` として、 `url` キーは `provider` として指定されます。
 
+```yaml
+# Config database root password for replication
+# Default password is 'secret' - change this in production!
+# You can generate a hashed password using: slappasswd -h '{SSHA}'
+slapd_config_rootpw: '{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid'
+```
+
+config database のレプリケーション設定で使用するルートパスワードを指定します。
+デフォルトは 'secret' のハッシュ値ですが、本番環境では必ず変更してください。
+`slappasswd -h '{SSHA}'` コマンドを使用してハッシュ化されたパスワードを生成できます。
+
 ## Dependencies
 
 None.
