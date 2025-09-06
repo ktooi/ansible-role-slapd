@@ -2,7 +2,9 @@
 - name: Define slapd_replication_servers
   set_fact:
     slapd_replication_servers: '{{ groups[slapd_replication_group] | list }}'
-  when: slapd_replication_servers is not defined
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_servers is not defined
   tags:
     - slapd_replication
 
@@ -21,7 +23,9 @@
       {{ loop.index }}
       {%-   endif -%}
       {%- endfor -%}
-  when: slapd_replication_server_id is not defined
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_server_id is not defined
   tags:
     - slapd_replication
 
@@ -40,7 +44,9 @@
       {%-   set _ = r.append({'id': loop.index, 'url': slapd_protocol + '://' + server}) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: slapd_replication_target_list is not defined
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_target_list is not defined
   tags:
     - slapd_replication
 
@@ -59,7 +65,9 @@
       {%-   set _ = r.append(target['id'] | string + ' ' + target['url']) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: slapd_replication_id_url_list is not defined
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_id_url_list is not defined
   tags:
     - slapd_replication
 
@@ -91,7 +99,9 @@
                                          passwd=slapd_config_rootpw_plain)) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: slapd_replication_sync_conf_list is not defined
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_sync_conf_list is not defined
   tags:
     - slapd_replication
 
@@ -124,7 +134,9 @@
                                          passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: slapd_replication_sync_db_list is not defined
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_sync_db_list is not defined
   tags:
     - slapd_replication
 
@@ -173,6 +185,7 @@
     attributes:
       cn: config
       olcServerID: '{{ slapd_replication_server_id }}'
+  when: slapd_replication | bool
   tags:
     - slapd_replication
 
@@ -183,6 +196,7 @@
     attributes:
       olcRootPW: '{{ slapd_config_rootpw | default("{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid") }}'
     state: present
+  when: slapd_replication | bool
   tags:
     - slapd_replication
 
@@ -214,6 +228,7 @@
     attributes:
       olcServerID: '{{ slapd_replication_id_url_list }}'
     state: present
+  when: slapd_replication | bool
   tags:
     - slapd_replication
 
@@ -253,7 +268,9 @@
     attributes:
       olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
     state: present
-  when: slapd_replication_server_id | int == 1
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_server_id | int == 1
   tags:
     - slapd_replication
     - molecule-idempotence-notest
@@ -265,14 +282,18 @@
     attributes:
       olcMirrorMode: 'TRUE'
     state: present
-  when: slapd_replication_server_id | int == 1
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_server_id | int == 1
   tags:
     - slapd_replication
 
 - name: Wait for first server to be ready
   pause:
     seconds: 5
-  when: slapd_replication_server_id | int != 1
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_server_id | int != 1
   tags:
     - slapd_replication
 
@@ -284,7 +305,9 @@
       olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
       olcMirrorMode: 'TRUE'
     state: present
-  when: slapd_replication_server_id | int != 1
+  when: 
+    - slapd_replication | bool
+    - slapd_replication_server_id | int != 1
   tags:
     - slapd_replication
     - molecule-idempotence-notest
@@ -324,6 +347,7 @@
         size.soft=unlimited size.hard=unlimited
       olcSyncrepl: '{{ slapd_replication_sync_db_list }}'
     state: exact
+  when: slapd_replication | bool
   tags:
     - slapd_replication
     - molecule-idempotence-notest
@@ -335,6 +359,7 @@
     attributes:
       olcMirrorMode: 'TRUE'
     state: exact
+  when: slapd_replication | bool
   tags:
     - slapd_replication
     - molecule-idempotence-notest  # TODO: https://github.com/ktooi/ansible-role-slapd/issues/7
