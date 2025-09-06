@@ -35,15 +35,7 @@ provisioner:
         slapd_install_module_memberof: true
         slapd_install_module_syncprov: true
 
-        slapd_replication: true
-        slapd_replication_group: ${MOLECULE_DISTRO:-ubuntu2004}
-        slapd_replication_target_list:
-          - id: 1
-            url: 'ldap://ldap01.test.example.com'
-          - id: 2
-            url: 'ldap://ldap02.test.example.com'
-        slapd_config_rootpw_plain: 'secret'
-        slapd_config_rootpw: '{SSHA}vv2y+i9GFGLLG/dSpmAMBgIlKhWqbOBr'
+        slapd_replication: false
       # https://github.com/ktooi/ansible-role-slapd/issues/12
       rockylinux9:
         slapd_install_module_refint: false
