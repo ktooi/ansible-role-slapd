@@ -148,12 +148,16 @@ slapd_replication_group: 'slapd'
 ```yaml
 # Config database root password for replication
 # Default password is 'secret' - change this in production!
-# You can generate a hashed password using: slappasswd -h '{SSHA}'
+# Plain text password for replication authentication
+slapd_config_rootpw_plain: 'secret'
+# Hashed password for config database (you can generate using: slappasswd -h '{SSHA}')
 slapd_config_rootpw: '{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid'
 ```
 
 config database のレプリケーション設定で使用するルートパスワードを指定します。
-デフォルトは 'secret' のハッシュ値ですが、本番環境では必ず変更してください。
+`slapd_config_rootpw_plain` は平文パスワード（レプリケーション認証用）、
+`slapd_config_rootpw` はハッシュ化されたパスワード（config database 用）です。
+デフォルトは 'secret' ですが、本番環境では必ず変更してください。
 `slappasswd -h '{SSHA}'` コマンドを使用してハッシュ化されたパスワードを生成できます。
 
 ## Dependencies

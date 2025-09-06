@@ -42,6 +42,7 @@ provisioner:
             url: 'ldap://ldap01.test.example.com'
           - id: 2
             url: 'ldap://ldap02.test.example.com'
+        slapd_config_rootpw_plain: 'secret'
         slapd_config_rootpw: '{SSHA}vv2y+i9GFGLLG/dSpmAMBgIlKhWqbOBr'
       # https://github.com/ktooi/ansible-role-slapd/issues/12
       rockylinux9:

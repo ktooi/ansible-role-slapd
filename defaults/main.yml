@@ -54,7 +54,9 @@ slapd_replication_uri_list:
 
 # Config database root password for replication
 # Default password is 'secret' - change this in production!
-# You can generate a hashed password using: slappasswd -h '{SSHA}'
+# Plain text password for replication authentication
+slapd_config_rootpw_plain: 'secret'
+# Hashed password for config database (you can generate using: slappasswd -h '{SSHA}')
 slapd_config_rootpw: '{SSHA}WwIZaud6SCSK1HfPyd+kMW9YG5kVTiid'
 
 # Users credential.
