@@ -2,7 +2,7 @@
 - name: Define slapd_replication_servers
   set_fact:
     slapd_replication_servers: '{{ groups[slapd_replication_group] | list }}'
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_servers is not defined
   tags:
@@ -23,7 +23,7 @@
       {{ loop.index }}
       {%-   endif -%}
       {%- endfor -%}
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_server_id is not defined
   tags:
@@ -44,7 +44,7 @@
       {%-   set _ = r.append({'id': loop.index, 'url': slapd_protocol + '://' + server}) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_target_list is not defined
   tags:
@@ -65,7 +65,7 @@
       {%-   set _ = r.append(target['id'] | string + ' ' + target['url']) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_id_url_list is not defined
   tags:
@@ -99,7 +99,7 @@
                                          passwd=slapd_config_rootpw_plain)) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_sync_conf_list is not defined
   tags:
@@ -134,7 +134,7 @@
                                          passwd=ldap_admin_passwd, basedn=ldap_basedn)) -%}
       {%- endfor -%}
       {{ r | list }}
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_sync_db_list is not defined
   tags:
@@ -268,7 +268,7 @@
     attributes:
       olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
     state: present
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_server_id | int == 1
   tags:
@@ -282,7 +282,7 @@
     attributes:
       olcMirrorMode: 'TRUE'
     state: present
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_server_id | int == 1
   tags:
@@ -291,7 +291,7 @@
 - name: Wait for first server to be ready
   pause:
     seconds: 5
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_server_id | int != 1
   tags:
@@ -305,7 +305,7 @@
       olcSyncrepl: '{{ slapd_replication_sync_conf_list }}'
       olcMirrorMode: 'TRUE'
     state: present
-  when: 
+  when:
     - slapd_replication | bool
     - slapd_replication_server_id | int != 1
   tags:
